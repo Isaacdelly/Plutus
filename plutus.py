@@ -86,7 +86,7 @@ def main():
             print ("\n\naddress: " + str(data[2]) + "\n" +
                    "private key: " + str(data[0]) + "\n" +
                    "public key: " + str(data[1]).upper() + "\n" +
-                   "balance: " + str(data[3] + "\n\n")
+                   "balance: " + str(data[3]) + "\n\n")
             file = open("plutus.txt","a")
             file.write("address: " + str(data[2]) + "\n" +
                        "private key: " + str(data[0]) + "\n" +
