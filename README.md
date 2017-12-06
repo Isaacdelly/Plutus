@@ -13,7 +13,7 @@ Clone Repository: `git clone https://github.com/Isaacdelly/Plutus`
 
 Pip Install Requirements: `pip install -r requirements.txt`
 
-Run file: `python plutus.py`
+Run file: `plutus.py`
 
 
 #
@@ -42,12 +42,12 @@ If the wallet is empty, then the format `Wallet Address = 0` will be printed. An
 
 >1A5P8ix6XaoCqXmtXxBwwhp5ZkYsqra32C = 0
 
-However, if a balance is found, then the output will include all necessary information about the wallet, including an estimated wallet balance in USD. A copy of the output will also be saved in a text file titled `plutus.txt` with all balances in Satoshi. An example is:
+However, if a balance is found, then the output will include all necessary information about the wallet. A copy of the output will also be saved in a text file titled `plutus.txt` with all balances in Satoshi. An example is:
 
 >address: 1FMdedPnanqb3Z2wHGxbZzm7r8k8oK97Mc<br>
 >private key: 89cd4d8984692f31e572dc61dc1bc78517ef440308b71faa1ed3815e7afa76a2<br>
 >public key: 04CF7C2B23181BA6EAA841F3A0CB07F387C1DB54FE5F3BE4CC590C4802E4BEE82C58AFC030734C90DE6119F1C1997136EDADA066684E5A7A94A73B2F095B0C14BA<br>
->balance: 100000 (approximately $8.98)<br>
+>balance: 100000<br>
 
 #
 
@@ -75,7 +75,7 @@ A majority of the issues with this program happen because of API requests. Despi
 
 # Efficiency
 
-This program is able to handle, generate, and query a private key all in 0.5 - 0.7 seconds. However, because this program uses the internet for balance requests, a slower internet connection may impact time efficiency. This program is also mathematically heavy, so processor speed may also impact time.
+This program is able to handle, generate, and query a private key all in 0.5 - 0.7 seconds. However, because this program uses the internet for balance requests, a slower internet connection may impact time efficiency.
 
 # Updates
 
