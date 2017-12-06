@@ -83,22 +83,15 @@ def main():
         if (data[3] == 0):
             print("{:<34}".format(str(data[2])) + " = " + str(data[3]))
         if (data[3] != 0 and data[3] > 0):
-            try:
-                price = requests.get("https://blockchain.info/q/24hrprice")
-                if (price.status_code != 200 and price.status_code != 400):
-                    total = 0
-                else:
-                    total = float(price.text)
-            except:
-                total = 0
-            print ("\n\naddress: " + str(data[2]) + "\nprivate key: " + str(data[0])
-                + "\npublic key: " + str(data[1]).upper() + "\nbalance: " + str(data[3])
-                + " (approximately $" + "{0:.2f}".format((data[3]/100000000)*total) + ")\n\n")
+            print ("\n\naddress: " + str(data[2]) + "\n" +
+                   "private key: " + str(data[0]) + "\n" +
+                   "public key: " + str(data[1]).upper() + "\n" +
+                   "balance: " + str(data[3] + "\n\n")
             file = open("plutus.txt","a")
             file.write("address: " + str(data[2]) + "\n" +
                        "private key: " + str(data[0]) + "\n" +
                        "public key: " + str(data[1]).upper() + "\n" +
-                       "balance: " + str(data[3]) + " (approximately $" + "{0:.2f}".format((data[3]/100000000)*total) + ")\n\n")
+                       "balance: " + str(data[3]) + "\n\n")
             file.close()
 
 print("\n|-------- Wallet Address --------| = Balance in Satoshi")
