@@ -57,8 +57,7 @@ def balance(address):
                 pause.p = 0  
             return -1
         if (API.status_code != 200 and API.status_code != 400 and API.status_code != 429):
-            print("\nHTTP Error Code: " + str(API.status_code)
-                + "\nTrying again in 5 seconds\n")
+            print("\nHTTP Error Code: " + str(API.status_code) + "\nTrying again in 5 seconds\n")
             time.sleep(5)
             return -1
         balance = int(API.text)
