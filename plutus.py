@@ -61,7 +61,7 @@ def balance(address):
             print("\nHTTP Error Code: " + str(API.status_code)
                 + "\nTrying again in 5 seconds\n")
             time.sleep(5)
-            return  -1
+            return -1
         balance = int(API.text)
         pause.p = 0
         return balance
