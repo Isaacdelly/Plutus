@@ -76,10 +76,10 @@ def balance(address):
 def main():
     data = [0,0,0,0]
     while True:
-        data[0] = privateKey()                                                                # data[0] = private key
-        data[1] = publicKey(data[0])                                                          # data[1] = public key
-        data[2] = address(data[1])                                                            # data[2] = wallet address
-        data[3] = balance(data[2])                                                            # data[3] = balance in Satoshi
+        data[0] = privateKey()
+        data[1] = publicKey(data[0])
+        data[2] = address(data[1])
+        data[3] = balance(data[2])
         if (data[3] == 0):
             print("{:<34}".format(str(data[2])) + " = " + str(data[3]))
         if (data[3] != 0 and data[3] > 0):
