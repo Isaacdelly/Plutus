@@ -69,7 +69,7 @@ If you are receiving a lot of errors, visit <a href="https://blockexplorer.com/"
 
 This program also responds to 429 HTTP responses because of the high frequency of server requests. When a 429 is encountered, the program will attempt to restart operaton. If several 429's are received repeatedly, the user will get the result printed above and will be forced to wait 30 seconds.
 
-A majority of the issues with this program happen because of API requests. Despite the heavy amount of error handling, there will most likely be issues with this program eventually. If you are getting errors and are unable to run this program, <a href="https://github.com/Isaacdelly/Plutus-NoCore/issues">raise an issue</a> and i'll try to patch it.
+A majority of the issues with this program happen because of API requests. Despite the heavy amount of error handling, there will most likely be issues with this program eventually. If you are getting errors and are unable to run this program, <a href="https://github.com/Isaacdelly/Plutus/issues">raise an issue</a> and i'll try to patch it.
 
 #
 
@@ -79,4 +79,4 @@ This program is able to handle, generate, and query a private key all in 0.5 - 0
 
 # Updates
 
-Plutus will be updated whenever an issue is raised. The speed of this program cannot be improved, so only error handling updates will be given. Raise an issue <a href="https://github.com/Isaacdelly/Plutus-NoCore/issues">here</a>.
+Plutus will be updated whenever an issue is raised. The speed of this program cannot be improved, so only error handling updates will be given. Raise an issue <a href="https://github.com/Isaacdelly/Plutus/issues">here</a>.
