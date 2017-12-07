@@ -3,7 +3,6 @@
 # https://github.com/Isaacdelly/Plutus
 
 import requests
-import argparse
 import os
 import binascii
 import ecdsa
