@@ -63,7 +63,7 @@ Or
 >Unable to connect to API after several attempts. HTTP Error Code: 429 <br>
 >Retrying in 30 seconds
 
-This program queries Block Explorer API for wallet balances making a HTTP request necessary for complete operation. If connection to the API is found to be unresponsive (failing to return a 200 http status) the program will pause for 5 seconds and attempt to restart operaton.
+This program queries Block Explorer API for wallet balances making a HTTP request necessary for complete operation. If connection to the API is found to be unresponsive (failing to return a 200 HTTP status) the program will pause for 5 seconds and attempt to restart operaton.
 
 If you are receiving a lot of errors, visit <a href="https://blockexplorer.com/">Blockexplorer.com</a> to see if their API might be down.
 
