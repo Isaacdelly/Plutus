@@ -56,7 +56,7 @@ However, if a balance is found, then the output will include all necessary infor
 If you are receiving: 
 
 >HTTP Error Code: (number)<br/>
->Trying again in 5 seconds
+>Retrying in 5 seconds
 
 Or
 
