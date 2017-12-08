@@ -83,7 +83,7 @@ def main():
         if (data[3] == 0):
             print("{:<34}".format(str(data[2])) + " = " + str(data[3]))
         if (data[3] != 0 and data[3] > 0):
-            print ("\n\naddress: " + str(data[2]) + "\n" +
+            print ("\naddress: " + str(data[2]) + "\n" +
                    "private key: " + str(data[0]) + "\n" +
                    "public key: " + str(data[1]).upper() + "\n" +
                    "balance: " + str(data[3]) + "\n\n")
