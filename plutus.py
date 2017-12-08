@@ -52,7 +52,7 @@ def balance(address):
         if (API.status_code == 429):
             pause.p += 1
             if (pause.p == 10):
-                print ("\nUnable to connect to API after several attempts. HTTP Error Code: 429\nRetrying in 30 seconds\n")
+                print ("\nUnable to connect to API after several attempts\nRetrying in 30 seconds\n")
                 time.sleep(30)
                 pause.p = 0  
             return -1
@@ -66,7 +66,7 @@ def balance(address):
     except:
         pause.p += 1
         if (pause.p == 10):
-            print ("\nUnable to connect to API after several attempts. HTTP Error Code: 429\nRetrying in 30 seconds\n")
+            print ("\nUnable to connect to API after several attempts\nRetrying in 30 seconds\n")
             time.sleep(30)
             pause.p = 0   
         return -1
