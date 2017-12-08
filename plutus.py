@@ -82,11 +82,11 @@ def main():
             continue
         if (data[3] == 0):
             print("{:<34}".format(str(data[2])) + " = " + str(data[3]))
-        if (data[3] != 0 and data[3] > 0):
+        if (data[3] > 0):
             print ("\naddress: " + str(data[2]) + "\n" +
                    "private key: " + str(data[0]) + "\n" +
                    "public key: " + str(data[1]).upper() + "\n" +
-                   "balance: " + str(data[3]) + "\n\n")
+                   "balance: " + str(data[3]) + "\n")
             file = open("plutus.txt","a")
             file.write("address: " + str(data[2]) + "\n" +
                        "private key: " + str(data[0]) + "\n" +
