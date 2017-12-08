@@ -50,7 +50,7 @@ def balance(address):
         API = requests.get("https://blockexplorer.com/api/addr/" + str(address) + "/balance")
         if (API.status_code == 429):
             pause.p += 1
-            if (pause.p == 10):
+            if (pause.p >= 10):
                 print ("\nUnable to connect to API after several attempts\nRetrying in 30 seconds\n")
                 time.sleep(30)
                 pause.p = 0  
@@ -64,7 +64,7 @@ def balance(address):
         return balance
     except:
         pause.p += 1
-        if (pause.p == 10):
+        if (pause.p >= 10):
             print ("\nUnable to connect to API after several attempts\nRetrying in 30 seconds\n")
             time.sleep(30)
             pause.p = 0   
