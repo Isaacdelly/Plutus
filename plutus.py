@@ -8,6 +8,7 @@ import binascii
 import ecdsa
 import hashlib
 import time
+import numpy
 
 class pause:
     p = 0
@@ -22,9 +23,7 @@ def publicKey(privatekey):
 
 def address(publickey):
     alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-    c = '0'
-    byte = '00'
-    zero = 0
+    c = '0'; byte = '00'; zero = 0
     var = hashlib.new('ripemd160')
     var.update(hashlib.sha256(binascii.unhexlify(publickey.encode())).digest())
     a = (byte + var.hexdigest())
@@ -60,7 +59,7 @@ def balance(address):
             print("\nHTTP Error Code: " + str(API.status_code) + "\nRetrying in 5 seconds\n")
             time.sleep(5)
             return -1
-        balance = int(API.text)
+        balance = numpy.int64(API.text)
         pause.p = 0
         return balance
     except:
