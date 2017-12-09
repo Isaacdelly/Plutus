@@ -8,7 +8,6 @@ import binascii
 import ecdsa
 import hashlib
 import time
-import numpy
 
 class pause:
     p = 0
@@ -59,7 +58,7 @@ def balance(address):
             print("\nHTTP Error Code: " + str(API.status_code) + "\nRetrying in 5 seconds\n")
             time.sleep(5)
             return -1
-        balance = numpy.int64(API.text)
+        balance = int(API.text)
         pause.p = 0
         return balance
     except:
