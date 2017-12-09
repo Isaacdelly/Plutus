@@ -1,3 +1,7 @@
+[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
+[![Maintenance](https://img.shields.io/maintenance/yes/2017.svg)]()
+[![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)]()
+[![apm](https://img.shields.io/apm/l/vim-mode.svg)]()
 # Plutus
 
 Bitcoin Brute Forcer<br/>
