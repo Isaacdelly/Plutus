@@ -1,7 +1,3 @@
-[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)](https://github.com/Isaacdelly/Plutus)
-[![Maintenance](https://img.shields.io/maintenance/yes/2017.svg)](https://github.com/Isaacdelly/Plutus)
-[![PyPI](https://img.shields.io/pypi/pyversions/Django.svg)](https://github.com/Isaacdelly/Plutus)
-[![apm](https://img.shields.io/apm/l/vim-mode.svg)](https://github.com/Isaacdelly/Plutus)
 # Plutus
 
 Bitcoin Brute Forcer<br/>
