@@ -23,17 +23,15 @@ Run File:
 
 ```
 $ cd Plutus
+
 $ python plutus.py
 ```
-
 
 #
 
 # Proof of Concept
 
-This program is meant to analyze possible ways Bitcoin could be stolen. Because it is impossible to convert a wallet address back into its private key, this program goes the opposite way and first generates a completely random private key which then gets converted into its respective address to see if it contains a balance. This program does this in a brute-force style, repeatedly converting randomly generated private keys into an address and querying a balance. <b>Because private keys are generated randomly, it is very unlikely a wallet with a balance will be found out of the 2<sup>160</sup> possible wallets in existence</b>. This project is simply an exploration into the Bitcoin protocol and advanced encryption and hashing techniques using Python.
-
-
+This program is meant to analyze possible ways Bitcoin could be stolen. Because it is impossible to convert a wallet address back into its private key, this program goes the opposite way and generates a completely random private key , then converts it into its respective address to see if it contains a balance. This program does this in a brute-force style, repeatedly converting randomly generated private keys into an address and querying a balance. Because private keys are generated randomly, it is very unlikely a wallet with a balance will be found out of the 2<sup>160</sup> possible wallets in existence. This project is simply an exploration into the Bitcoin protocol and advanced encryption and hashing techniques using Python.
 
 #
 
