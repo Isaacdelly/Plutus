@@ -3,7 +3,8 @@
 Bitcoin Brute Forcer<br/>
 
 #
-# Installation
+
+# Installation and Usage
 
 <b>Python 3+ Required</b> 
 
@@ -31,23 +32,29 @@ $ python plutus.py
 
 # Proof of Concept
 
-This program is meant to analyze possible ways Bitcoin could be stolen. Because it is impossible to convert a wallet address back into its private key, this program goes the opposite way and generates a completely random private key , then converts it into its respective address to see if it contains a balance. This program does this in a brute-force style, repeatedly converting randomly generated private keys into an address and querying a balance. Because private keys are generated randomly, it is very unlikely a wallet with a balance will be found out of the 2<sup>160</sup> possible wallets in existence. This project is simply an exploration into the Bitcoin protocol and advanced encryption and hashing techniques using Python.
+This program is meant to analyze possible ways Bitcoin could be stolen. Because it is impossible to convert a wallet address back into its private key, this program goes the opposite way and generates a completely random private key, then converts it into its respective Bitcoin address. It then queries the calculated address for a balance and <a href="https://github.com/Isaacdelly/Plutus/blob/master/README.md#expected-outputs">prints the result</a> to the user.
+
+This program does this in a brute-force style, repeatedly generating and converting private keys, and querying balances. The ultimate goal is to randomly find a wallet with a balance out of the 2<sup>160</sup> possible wallets in existence. However unlikely, it is possible to eventually find a viable wallet. In the event that a wallet with a balance is found, the wallet private key is stored in a text file for later use.
+
+Although this project can be used maliciously, it is simply an exploration into the Bitcoin protocol and advanced encryption and hashing techniques using Python.
 
 #
 
 # How it Works
 
-Private keys are generated randomly to create a 32 byte hexidecimal string using the cryptographically secure os.urandom function in UTF-8 format.
+Private keys are generated randomly to create a 32 byte hexidecimal string using the cryptographically secure `os.urandom` function.
 
-The private keys are converted into their respective public keys. Then the public keys are converted in their Bitcoin wallet addresses using the binascii, ecdsa, and hashlib Python modules.
+The private keys are converted into their respective public keys. Then the public keys are converted in their Bitcoin wallet addresses using the `binascii`, `ecdsa`, and `hashlib` Python modules.
 
-The wallet addresses are queried using Block Explorer API to collect balance details.
+The wallet addresses are queried using <a href="https://blockexplorer.com/api-ref">Block Explorer API</a> to collect balance details.
 
 If the wallet contains a balance, then the address, private key, public key, and balance are saved to a text file `plutus.txt` on the user's hard drive.
 
 #
 
 # Expected Outputs
+
+<br><img align="center" src="https://media.giphy.com/media/xULW8mRFQ0WDxEDJ5K/giphy.gif"> <br><br>
 
 If the wallet is empty, then the format `Wallet Address = 0` will be printed. An example is:
 
