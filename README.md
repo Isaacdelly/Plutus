@@ -44,9 +44,9 @@ Although this project can be used maliciously, it is simply an exploration into 
 
 Private keys are generated randomly to create a 32 byte hexidecimal string using the cryptographically secure `os.urandom()` function.
 
-The private keys are converted into their respective public keys. Then the public keys are converted in their Bitcoin wallet addresses using the `binascii`, `ecdsa`, and `hashlib` Python modules.
+The private keys are converted into their respective public keys. Then the public keys are converted into their Bitcoin wallet addresses using the `binascii`, `ecdsa`, and `hashlib` Python modules.
 
-The wallet addresses are queried using <a href="https://blockexplorer.com/api-ref">Block Explorer API</a> to collect balance details.
+The wallet addresses are queried using <a href="https://blockexplorer.com/api-ref" target="_blank">Block Explorer API</a> to collect balance details.
 
 If the wallet contains a balance, then the address, private key, public key, and balance are saved to a text file `plutus.txt` on the user's hard drive.
 
