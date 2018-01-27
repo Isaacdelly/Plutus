@@ -92,6 +92,6 @@ def main():
                        "balance: " + str(data[3]) + "\n\n")
             file.close()
 
-print("\n|-------- Wallet Address --------| = Balance in Satoshi")
 if __name__ == '__main__':
+    print("\n|-------- Wallet Address --------| = Balance in Satoshi")
     main()
