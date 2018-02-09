@@ -46,7 +46,7 @@ def address(publickey):
 
 def balance(address):
     try:
-        API = requests.get("https://blockexplorer.com/api/addr/" + str(address) + "/balance")
+        API = requests.get("https://bitcoinlegacy.blockexplorer.com/api/addr/" + str(address) + "/balance")
         if (API.status_code == 429):
             pause.p += 1
             if (pause.p >= 10):
