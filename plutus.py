@@ -2,6 +2,7 @@
 # Made by Isaac Delly
 # https://github.com/Isaacdelly/Plutus
 
+from bit import Key
 import requests
 import os
 import binascii
@@ -83,11 +84,13 @@ def main():
         if (data[3] > 0):
             print ("\naddress: " + str(data[2]) + "\n" +
                    "private key: " + str(data[0]) + "\n" +
+                   "WIF private key: " + str(Key.from_hex(data[0]).to_wif()) + "\n" +
                    "public key: " + str(data[1]).upper() + "\n" +
                    "balance: " + str(data[3]) + "\n")
             file = open("plutus.txt","a")
             file.write("address: " + str(data[2]) + "\n" +
                        "private key: " + str(data[0]) + "\n" +
+                       "WIF private key: " + str(Key.from_hex(data[0]).to_wif()) + "\n" +
                        "public key: " + str(data[1]).upper() + "\n" +
                        "balance: " + str(data[3]) + "\n\n")
             file.close()
