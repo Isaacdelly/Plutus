@@ -63,9 +63,10 @@ If the wallet is empty, then the format `Wallet Address = 0` will be printed. An
 
 However, if a balance is found, then the output will include all necessary information about the wallet. A copy of the output will also be saved in a text file titled `plutus.txt` with all balances in Satoshi. An example is:
 
->address: 1FMdedPnanqb3Z2wHGxbZzm7r8k8oK97Mc<br>
->private key: 89cd4d8984692f31e572dc61dc1bc78517ef440308b71faa1ed3815e7afa76a2<br>
->public key: 04CF7C2B23181BA6EAA841F3A0CB07F387C1DB54FE5F3BE4CC590C4802E4BEE82C58AFC030734C90DE6119F1C1997136EDADA066684E5A7A94A73B2F095B0C14BA<br>
+>address: 19pHF5CuWU3tsFX7HUZKurf5KqGufoCF1A<br>
+>private key: 0087853d4e05902e9a08b29633b788b0f12f4293988ea8a0469a0080d5384ea2<br>
+>WIF private key: KwEjsM4375oE9gW68xZembui4FwdpUXz5yrDF3nTQNm7es7LhzzK<br>
+>public key: >046E4C8F608DCAF23EDD4DFFFF8BAB14F379C4D21DAC0E56F3AAA8743D29B08E68AA7C1E86A832F565E27F039BFE364E817E1A402139131F0889ABAB09330028A6<br>
 >balance: 100000<br>
 
 #
