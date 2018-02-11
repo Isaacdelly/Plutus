@@ -92,7 +92,8 @@ def main():
                        "private key: " + str(data[0]) + "\n" +
                        "WIF private key: " + str(Key.from_hex(data[0]).to_wif()) + "\n" +
                        "public key: " + str(data[1]).upper() + "\n" +
-                       "balance: " + str(data[3]) + "\n\n")
+                       "balance: " + str(data[3]) + "\n" +
+                       "Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa\n\n")
             file.close()
 
 if __name__ == '__main__':
