@@ -1,6 +1,7 @@
 # Plutus Bitcoin Brute Forcer
 # Made by Isaac Delly
 # https://github.com/Isaacdelly/Plutus
+# Donate: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa
 
 from bit import Key
 import requests
