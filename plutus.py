@@ -3,7 +3,6 @@
 # https://github.com/Isaacdelly/Plutus
 # Donate: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa
 
-from bit import Key
 import requests
 import os
 import binascii
@@ -91,7 +90,6 @@ def main():
             file = open("plutus.txt","a")
             file.write("address: " + str(data[2]) + "\n" +
                        "private key: " + str(data[0]) + "\n" +
-                       "WIF private key: " + str(Key.from_hex(data[0]).to_wif()) + "\n" +
                        "public key: " + str(data[1]).upper() + "\n" +
                        "balance: " + str(data[3]) + "\n" +
                        "Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa\n\n")
