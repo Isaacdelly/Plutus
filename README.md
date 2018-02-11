@@ -1,7 +1,10 @@
 # Plutus
 
-Bitcoin Brute Forcer
-<br/>
+Bitcoin Brute Forcer<br/>
+
+#
+
+``` Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa ```
 
 #
 
@@ -94,5 +97,9 @@ This program also responds to 429 HTTP responses because of the high frequency o
 # Efficiency
 
 This program is able to handle, generate, and query a private key in 0.5 seconds. However, because this program uses the internet for balance requests, a slower internet connection may impact time efficiency.
+
+#
+
+``` Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa ```
 
 #
