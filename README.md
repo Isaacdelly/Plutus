@@ -38,7 +38,7 @@ $ python plutus.py
 
 This program is meant to analyze possible ways Bitcoin could be stolen. Because it is impossible to convert a wallet address back into its private key, this program goes the opposite way and generates a completely random private key, then converts it into its respective Bitcoin address. It then queries the calculated address for a balance and <a href="#expected-outputs">prints the result</a> to the user.
 
-This program does this in a brute-force style, repeatedly generating and converting private keys, and querying balances. The ultimate goal is to randomly find a wallet with a balance out of the 2<sup>160</sup> possible wallets in existence. However unlikely, it is possible to eventually find a viable wallet. In the event that a wallet with a balance is found, the wallet's private key, public key, wallet address, and balance is stored in a text file for later use.
+This program does this in a brute-force style, repeatedly generating and converting private keys, and querying balances. The ultimate goal is to randomly find a wallet with a balance out of the 2<sup>160</sup> possible wallets in existence. Although it is unlikely, it is possible to eventually find a wallet with a balance. In the event that a wallet with a balance is found, the wallet's private key, public key, wallet address, and balance is stored in a text file for later use.
 
 Although this project can be used maliciously, it is simply an exploration into the Bitcoin protocol and advanced encryption and hashing techniques using Python.
 
