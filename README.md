@@ -4,7 +4,9 @@ Bitcoin Brute Forcer<br/>
 
 #
 
-``` Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa ```
+```
+Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa
+```
 
 #
 
@@ -100,6 +102,8 @@ This program is able to handle, generate, and query a private key in 0.5 seconds
 
 #
 
-``` Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa ```
+```
+Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa
+```
 
 #
