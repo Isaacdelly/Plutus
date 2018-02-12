@@ -9,6 +9,7 @@ import binascii
 import ecdsa
 import hashlib
 import time
+import base58
 
 class pause:
     p = 0
@@ -70,6 +71,13 @@ def balance(address):
             pause.p = 0   
         return -1
 
+def toWIF(privatekey):
+    var80 = "80" + str(privatekey) 
+    var = hashlib.sha256(binascii.unhexlify(var80)).hexdigest()
+    var = hashlib.sha256(binascii.unhexlify(var)).hexdigest()    
+    checksum = var[0:8]
+    return str(base58.b58encode(binascii.unhexlify(str(var80) + str(checksum))))
+
 def main():
     data = [0,0,0,0]
     while True:
@@ -84,11 +92,13 @@ def main():
         if (data[3] > 0):
             print ("\naddress: " + str(data[2]) + "\n" +
                    "private key: " + str(data[0]) + "\n" +
+                   "WIF private key: " + toWIF(str(data[0])) + "\n" +
                    "public key: " + str(data[1]).upper() + "\n" +
                    "balance: " + str(data[3]) + "\n")
             file = open("plutus.txt","a")
             file.write("address: " + str(data[2]) + "\n" +
                        "private key: " + str(data[0]) + "\n" +
+                       "WIF private key: " + toWIF(str(data[0])) + "\n" +
                        "public key: " + str(data[1]).upper() + "\n" +
                        "balance: " + str(data[3]) + "\n" +
                        "Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa\n\n")
