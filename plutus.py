@@ -8,8 +8,8 @@ import os
 import binascii
 import ecdsa
 import hashlib
-import time
 import base58
+import time
 
 class pause:
     p = 0
