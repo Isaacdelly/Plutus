@@ -92,13 +92,13 @@ def main():
         if (data[3] > 0):
             print ("\naddress: " + str(data[2]) + "\n" +
                    "private key: " + str(data[0]) + "\n" +
-                   "WIF private key: " + toWIF(str(data[0])) + "\n" +
+                   "WIF private key: " + str(toWIF(str(data[0]))) + "\n" +
                    "public key: " + str(data[1]).upper() + "\n" +
                    "balance: " + str(data[3]) + "\n")
             file = open("plutus.txt","a")
             file.write("address: " + str(data[2]) + "\n" +
                        "private key: " + str(data[0]) + "\n" +
-                       "WIF private key: " + toWIF(str(data[0])) + "\n" +
+                       "WIF private key: " + str(toWIF(str(data[0]))) + "\n" +
                        "public key: " + str(data[1]).upper() + "\n" +
                        "balance: " + str(data[3]) + "\n" +
                        "Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa\n\n")
