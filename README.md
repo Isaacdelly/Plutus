@@ -32,8 +32,15 @@ Run File:
 $ cd Plutus
 
 $ python plutus.py
+(traditional execution)
+
+or 
+
+$ python plutus.py -m
+(multiprocessing)
 ```
 
+Multiprocessing is now supported thanks to Wayne Yao (https://github.com/wx-Yao)
 #
 
 # Proof of Concept
@@ -92,7 +99,7 @@ This program queries Block Explorer API for wallet balances making a HTTP reques
 
 If you are receiving a lot of errors, visit <a href="https://bitcoinlegacy.blockexplorer.com/">Blockexplorer.com</a> to see if their API might be down.
 
-This program also responds to 429 HTTP responses because of the high frequency of server requests. When a 429 is encountered, the program will continue without giving an error. However, if several 429's are received consecutively, the user will get the result `Unable to connect to API after several attempts` and will be forced to wait 30 seconds until the program continues again.
+This program also responds to 429 HTTP responses because of the high frequency of server requests. When a 429 is encountered, the program will print the error, but will not pause. However, if several 429's are received consecutively, the user will get the result `Unable to connect to API after several attempts` and will be forced to wait 30 seconds until the program continues again.
 
 #
 
