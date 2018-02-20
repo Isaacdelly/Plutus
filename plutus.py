@@ -172,11 +172,11 @@ def multi():
             process.terminate()
         print('\n -----------------------\n All processes terminated.')
 
-### End of Mutliprocessing Extension ###
+### End of Multiprocessing Extension ###
 
 def main():
     if ("-m" in sys.argv):
-        print("\n MULTIPROCESSING MODE ACTIVATED\n")
+        print("\nMULTIPROCESSING MODE ACTIVATED\n")
         multi()
     else:
         Plutus()
