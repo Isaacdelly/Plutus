@@ -106,7 +106,7 @@ def Plutus(): # Main Plutus Function
                        "Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa\n\n")
             file.close()
 
-### Multiprocessing Extension Made By https://github.com/wx-Yao ###
+### Multiprocessing Extension Made By Wayne Yao https://github.com/wx-Yao ###
             
 def put_dataset(queue):
     while 1:
