@@ -177,7 +177,7 @@ def multi():
 
 def main():
     if (len(sys.argv) > 1):
-        if (sys.argv[1] == "-m" or "m"):
+        if (sys.argv[1] == "-m"):
             print("\nMULTIPROCESSING MODE SELECTED\n")
             multi()
         else:
