@@ -30,15 +30,16 @@ $ pip install -r requirements.txt
 
 # Execution
 
-Traditional Mode: Multiprocessing __disabled__
+Traditional Mode: Multiprocessing __disabled__:
 
 ```
 $ cd Plutus
 
 $ python plutus.py
 ```
+<br>
 
-Multiprocessing __enabled__
+Multiprocessing __enabled__:
 
 ```
 $ cd Plutus
@@ -47,6 +48,13 @@ $ python plutus.py -m
 ```
 
 Multiprocessing is supported thanks to Wayne Yao (https://github.com/wx-Yao)
+
+#
+
+# Multiprocessing
+
+Running the file with with a `-m` argument actives Multiprocessing Mode, an extension of the original program that maximizes the usage of your computer's cores. This mode generates private keys in bursts compared to the traditional version's one at a time, in an attempt to improve the speed and efficiency of the program. However, activating this mode risks greater chances of the API getting overloaded, possibly causing your IP address to get temporarily blocked. 
+
 #
 
 # Proof of Concept
