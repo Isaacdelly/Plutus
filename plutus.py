@@ -117,7 +117,6 @@ def put_dataset(queue):
             publickey=publicKey(privatekey)
             Address=address(publickey)
             WIF=toWIF(privatekey)
-            
             dataset=(Address,privatekey,publickey,WIF)
             queue.put(dataset,block=False)
     return None
@@ -176,12 +175,9 @@ def multi():
 ### End of Mutliprocessing Extension ###
 
 def main():
-    if (len(sys.argv) > 1):
-        if (sys.argv[1] == "-m"):
-            print("\nMULTIPROCESSING MODE SELECTED\n")
-            multi()
-        else:
-            Plutus()
+    if ("-m" in sys.argv):
+        print("\n MULTIPROCESSING MODE ACTIVATED\n")
+        multi()
     else:
         Plutus()
 
