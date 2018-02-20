@@ -10,6 +10,7 @@ import ecdsa
 import hashlib
 import base58
 import time
+from multiprocessing import Process, Queue
 
 class pause:
     p = 0
@@ -46,6 +47,7 @@ def address(publickey):
         count += 1
     return ''.join(output[::-1])
 
+
 def balance(address):
     try:
         API = requests.get("https://bitcoinlegacy.blockexplorer.com/api/addr/" + str(address) + "/balance")
@@ -78,32 +80,75 @@ def toWIF(privatekey):
     checksum = var[0:8]
     return str(base58.b58encode(binascii.unhexlify(str(var80) + str(checksum))))
 
-def main():
-    data = [0,0,0,0]
-    while True:
-        data[0] = privateKey()
-        data[1] = publicKey(data[0])
-        data[2] = address(data[1])
-        data[3] = balance(data[2])
-        if (data[3] == -1):
-            continue
-        if (data[3] == 0):
-            print("{:<34}".format(str(data[2])) + " = " + str(data[3]))
-        if (data[3] > 0):
-            print ("\naddress: " + str(data[2]) + "\n" +
-                   "private key: " + str(data[0]) + "\n" +
-                   "WIF private key: " + str(toWIF(str(data[0]))) + "\n" +
-                   "public key: " + str(data[1]).upper() + "\n" +
-                   "balance: " + str(data[3]) + "\n")
-            file = open("plutus.txt","a")
-            file.write("address: " + str(data[2]) + "\n" +
-                       "private key: " + str(data[0]) + "\n" +
-                       "WIF private key: " + str(toWIF(str(data[0]))) + "\n" +
-                       "public key: " + str(data[1]).upper() + "\n" +
-                       "balance: " + str(data[3]) + "\n" +
-                       "Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa\n\n")
-            file.close()
+##################
+#format of dataset:
+# 0: address
+# 1: private key
+# 2: public key
+# 3: WIF
+#################
+def put_dataset(queue):
+    while 1:
+        if queue.qsize()>100:
+            time.sleep(10)
+        else:
+            privatekey=privateKey()
+            publickey=publicKey(privatekey)
+            Address=address(publickey)
+            WIF=toWIF(privatekey)
+            
+            dataset=(Address,privatekey,publickey,WIF)
+            queue.put(dataset,block=False)
+    return None
+
+def worker(queue):
+    time.sleep(1)
+    while 1:
+        if queue.qsize()>0:
+            dataset=queue.get(block=True)
+            balan=balance(dataset[0])
+            process_balance(dataset,balan)
+        else:
+            time.sleep(3)
+    return None
+
+def process_balance(dataset,balance):
+    if balance == -1 :
+        return None
+    elif balance == 0 :
+        print("{:<34}".format(str(dataset[0])) + " = " + str(balance))
+        return None
+    else:
+        addr=dataset[0]
+        privatekey=dataset[1]
+        publickey=dataset[2]
+        WIF=dataset[3]
+        file = open("plutus.txt","a")
+        file.write("address: " + str(addr) + "\n" +
+                   "private key: " + str(privatekey) + "\n" +
+                   "WIF private key: " + str(WIF) + "\n" +
+                   "public key: " + str(publickey).upper() + "\n" +
+                   "balance: " + str(balance) + "\n" +
+                   "Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa\n\n")
+        file.close()
+    return None
 
 if __name__ == '__main__':
     print("\n|-------- Wallet Address --------| = Balance in Satoshi")
-    main()
+    processes=[]
+    dataset=Queue()
+    datasetProducer=Process(target=put_dataset,args=(dataset,))
+    datasetProducer.daemon=True
+    processes.append(datasetProducer)
+    datasetProducer.start()
+    for core in range(4):
+        work=Process(target=worker,args=(dataset,))
+        work.deamon=True
+        processes.append(work)
+        work.start()
+    try:
+        datasetProducer.join()
+    except KeyboardInterrupt:
+        for process in processes:
+            process.terminate()
+        print('\n -----------------------\n All processes terminated.')
