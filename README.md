@@ -10,7 +10,7 @@ Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa
 
 #
 
-# Installation and Usage
+# Installation
 
 <b>Python 3+ Required</b> 
 
@@ -26,21 +26,27 @@ $ cd Plutus
 $ pip install -r requirements.txt 
 ```
 
-Run File: 
+#
+
+# Execution
+
+Traditional Mode: Multiprocessing __disabled__
 
 ```
 $ cd Plutus
 
 $ python plutus.py
-(traditional execution)
-
-or 
-
-$ python plutus.py -m
-(multiprocessing)
 ```
 
-Multiprocessing is now supported thanks to Wayne Yao (https://github.com/wx-Yao)
+Multiprocessing __enabled__
+
+```
+$ cd Plutus
+
+$ python plutus.py -m
+```
+
+Multiprocessing is supported thanks to Wayne Yao (https://github.com/wx-Yao)
 #
 
 # Proof of Concept
