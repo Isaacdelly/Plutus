@@ -28,9 +28,9 @@ $ pip install -r requirements.txt
 
 #
 
-# Execution
+# Usage
 
-Traditional Mode: Multiprocessing __disabled__:
+Traditional Mode: Multiprocessing __disabled__
 
 ```
 $ cd Plutus
@@ -39,7 +39,7 @@ $ python plutus.py
 ```
 <br>
 
-Multiprocessing __enabled__:
+Multiprocessing Mode: Multiprocessing __enabled__
 
 ```
 $ cd Plutus
