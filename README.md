@@ -53,7 +53,7 @@ Multiprocessing is supported thanks to Wayne Yao (https://github.com/wx-Yao)
 
 # Multiprocessing
 
-Running the file with with a `-m` argument activates Multiprocessing Mode, an extension of the original program that maximizes the usage of your computer's cores. This mode generates private keys in bursts compared to the traditional version's one at a time, in an attempt to improve the speed and efficiency of the program. However, activating this mode risks greater chances of the API getting overloaded, possibly causing your IP address to get temporarily blocked. 
+Running the file with with a `-m` argument activates Multiprocessing Mode, an extension of the original program that maximizes the usage of your computer's cores. This mode generates private keys in bursts compared to the traditional version's one at a time, in an attempt to improve the speed and efficiency of the program. However, activating this mode risks greater chances of the API getting overloaded, possibly causing your IP address to get temporarily blocked. If you are running this program for long periods of time, it is recommended to run the traditional version.
 
 #
 
@@ -73,7 +73,7 @@ Private keys are generated randomly to create a 32 byte hexidecimal string using
 
 The private keys are converted into their respective public keys. Then the public keys are converted into their Bitcoin wallet addresses using the `binascii`, `ecdsa`, and `hashlib` Python modules.
 
-The wallet addresses are queried using <a href="https://bitcoinlegacy.blockexplorer.com/api-ref" target="_blank">Block Explorer API</a> to collect balance details.
+The wallet addresses are queried using <a href="https://bitcoinlegacy.blockexplorer.com/api-ref">Block Explorer API</a> to collect balance details.
 
 If the wallet contains a balance, then the private key, public key, wallet address, and balance are saved to a text file `plutus.txt` on the user's hard drive.
 
@@ -113,7 +113,7 @@ This program queries Block Explorer API for wallet balances making a HTTP reques
 
 If you are receiving a lot of errors, visit <a href="https://bitcoinlegacy.blockexplorer.com/">Blockexplorer.com</a> to see if their API might be down.
 
-This program also responds to 429 HTTP responses because of the high frequency of server requests. When a 429 is encountered, the program will print the error, but will not pause. However, if several 429's are received consecutively, the user will get the result `Unable to connect to API after several attempts` and will be forced to wait 30 seconds until the program continues again.
+This program also responds to 429 HTTP responses because of the high frequency of server requests. When a 429 is encountered, the program will print the error `HTTP Error Code: 429`, but will not pause. However, if several 429's are received consecutively, the user will get the result `Unable to connect to API after several attempts` and will be forced to wait 30 seconds until the program continues again.
 
 #
 
