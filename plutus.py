@@ -109,25 +109,25 @@ def Plutus(): # Main Plutus Function
 ### Multiprocessing Extension Made By Wayne Yao https://github.com/wx-Yao ###
             
 def put_dataset(queue):
-    while 1:
-        if queue.qsize()>100:
+    while True:
+        if queue.qsize() > 100:
             time.sleep(10)
         else:
-            privatekey=privateKey()
-            publickey=publicKey(privatekey)
-            Address=address(publickey)
-            WIF=toWIF(privatekey)
-            dataset=(Address,privatekey,publickey,WIF)
-            queue.put(dataset,block=False)
+            privatekey = privateKey()
+            publickey = publicKey(privatekey)
+            Address = address(publickey)
+            WIF = toWIF(privatekey)
+            dataset = (Address, privatekey, publickey, WIF)
+            queue.put(dataset, block = False)
     return None
 
 def worker(queue):
     time.sleep(1)
-    while 1:
-        if queue.qsize()>0:
-            dataset=queue.get(block=True)
-            balan=balance(dataset[0])
-            process_balance(dataset,balan)
+    while True:
+        if queue.qsize() > 0:
+            dataset = queue.get(block = True)
+            balan = balance(dataset[0])
+            process_balance(dataset, balan)
         else:
             time.sleep(3)
     return None
@@ -139,10 +139,10 @@ def process_balance(dataset,balance):
         print("{:<34}".format(str(dataset[0])) + " = " + str(balance))
         return None
     else:
-        addr=dataset[0]
-        privatekey=dataset[1]
-        publickey=dataset[2]
-        WIF=dataset[3]
+        addr = dataset[0]
+        privatekey = dataset[1]
+        publickey = dataset[2]
+        WIF = dataset[3]
         file = open("plutus.txt","a")
         file.write("address: " + str(addr) + "\n" +
                    "private key: " + str(privatekey) + "\n" +
@@ -154,15 +154,15 @@ def process_balance(dataset,balance):
     return None
 
 def multi():
-    processes=[]
-    dataset=Queue()
-    datasetProducer=Process(target=put_dataset,args=(dataset,))
-    datasetProducer.daemon=True
+    processes = []
+    dataset = Queue()
+    datasetProducer = Process(target = put_dataset, args = (dataset,))
+    datasetProducer.daemon = True
     processes.append(datasetProducer)
     datasetProducer.start()
     for core in range(4):
-        work=Process(target=worker,args=(dataset,))
-        work.deamon=True
+        work = Process(target = worker, args = (dataset,))
+        work.deamon = True
         processes.append(work)
         work.start()
     try:
@@ -170,18 +170,20 @@ def multi():
     except KeyboardInterrupt:
         for process in processes:
             process.terminate()
-        print('\n -----------------------\n All processes terminated.')
+        print('\n\n------------------------\nALL PROCESSES TERMINATED\n')
 
 ### End of Multiprocessing Extension ###
 
 def main():
     if ("-m" in sys.argv):
-        print("\nMULTIPROCESSING MODE ACTIVATED\n")
+        print("\n-------- MULTIPROCESSING MODE ACTIVATED --------\n")
+        time.sleep(3)
+        print("\n|-------- Wallet Address --------| = Balance in Satoshi")
         multi()
     else:
+        print("\n|-------- Wallet Address --------| = Balance in Satoshi")
         Plutus()
 
 if __name__ == '__main__':
-    print("\n|-------- Wallet Address --------| = Balance in Satoshi")
     main()
             
