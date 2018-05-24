@@ -1,8 +1,3 @@
-# Plutus Bitcoin Brute Forcer
-# Made by Isaac Delly
-# https://github.com/Isaacdelly/Plutus
-# Donate: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa
-
 import requests
 import os
 import binascii
@@ -11,7 +6,7 @@ import hashlib
 import base58
 import time
 import sys
-from multiprocessing import Process, Queue
+import multiprocessing
 
 class pause: # Counts API failures for timeout
     p = 0
@@ -48,9 +43,6 @@ def address(publickey): # Public Key -> Wallet Address
         count += 1
     return ''.join(output[::-1])
 
-def balance(address): # Query API for wallet balance
-    return 666
-
 def toWIF(privatekey): # Hex Private Key -> WIF format
     var80 = "80" + str(privatekey) 
     var = hashlib.sha256(binascii.unhexlify(hashlib.sha256(binascii.unhexlify(var80)).hexdigest())).hexdigest()
@@ -58,9 +50,9 @@ def toWIF(privatekey): # Hex Private Key -> WIF format
 
 def isRich(address,myList): #Determine if the address belongs to Richie Rich
     if (address in myList):
-        print(address+' is in list')
+        print(address+' is in the list')#, end='')
         return 1
-    print(address+' not in list')
+    print(address+' is NOT in the list')#, end='')
     return 0
 
 def Plutus(): # Main Plutus Function
@@ -82,19 +74,17 @@ def Plutus(): # Main Plutus Function
             print ("\naddress: " + str(data[2]) + "\n" +
                    "private key: " + str(data[0]) + "\n" +
                    "WIF private key: " + str(toWIF(str(data[0]))) + "\n" +
-                   "public key: " + str(data[1]).upper() + "\n" +
-                   "balance: " + str(data[3]) + "\n")
+                   "public key: " + str(data[1]).upper() + "\n")
             file = open("plutus.txt","a")
             file.write("address: " + str(data[2]) + "\n" +
                        "private key: " + str(data[0]) + "\n" +
                        "WIF private key: " + str(toWIF(str(data[0]))) + "\n" +
-                       "public key: " + str(data[1]).upper() + "\n" +
-                       "balance: " + str(data[3]) + "\n\n")
+                       "public key: " + str(data[1]).upper() + "\n")
             file.close()
 
 ### Multiprocessing Extension Made By Wayne Yao https://github.com/wx-Yao ###
             
-def put_dataset(queue,balance,myList):
+def put_dataset(queue,myList):
     while True:
         if queue.qsize() > 100:
             time.sleep(10)
@@ -107,44 +97,50 @@ def put_dataset(queue,balance,myList):
             queue.put(dataset, block = False)
     return None
 
-def worker(queue,balance,myList):
+def worker(queue,myList):
     time.sleep(1)
     while True:
         if queue.qsize() > 0:
             dataset = queue.get(block = True)
-            balan = balance(dataset[0])
-            process_balance(dataset, balan,myList)
+            process_balance(dataset,myList)
         else:
             time.sleep(3)
     return None
 
-def process_balance(dataset,balance,myList):
+
+def process_balance(dataset,myList):
     addr = dataset[0]
     privatekey = dataset[1]
     publickey = dataset[2]
     WIF = dataset[3]
-
-    if (isRich(data[2],myList)):
+    file = open("plutus.txt","a")
+    if (isRich(addr,myList)):
         file = open("plutus.txt","a")
+        print("address: " + str(addr) + "\n" +
+                   "private key: " + str(privatekey) + "\n" +
+                   "WIF private key: " + str(WIF) + "\n" +
+                   "public key: " + str(publickey).upper() + "\n")
         file.write("address: " + str(addr) + "\n" +
                    "private key: " + str(privatekey) + "\n" +
                    "WIF private key: " + str(WIF) + "\n" +
-                   "public key: " + str(publickey).upper() + "\n" +
-                   "balance: " + str(balance) + "\n\n")
+                   "public key: " + str(publickey).upper() + "\n")
         file.close()
     return None
 
 def multi():
     with open('balances.txt') as file:
         myList= file.read().split()
+    file.close()
+
     processes = []
     dataset = Queue()
-    datasetProducer = Process(target = put_dataset, args = (dataset,balance,myList))
+    datasetProducer = Process(target = put_dataset, args = (dataset,myList))
     datasetProducer.daemon = True
     processes.append(datasetProducer)
     datasetProducer.start()
-    for core in range(4):
-        work = Process(target = worker, args = (dataset,balance,myList))
+    numCores = multiprocessing.cpu_count()
+    for core in range(numCores):
+        work = Process(target = worker, args = (dataset,myList))
         work.deamon = True
         processes.append(work)
         work.start()
@@ -161,10 +157,10 @@ def main():
     if ("-m" in sys.argv):
         print("\n-------- MULTIPROCESSING MODE ACTIVATED --------\n")
         time.sleep(3)
-        print("\n|-------- Wallet Address --------| = Balance in Satoshi")
+        print("\n|-------- Wallet Address --------|")
         multi()
     else:
-        print("\n|-------- Wallet Address --------| = Balance in Satoshi")
+        print("\n|-------- Wallet Address --------|")
         Plutus()
 
 if __name__ == '__main__':
