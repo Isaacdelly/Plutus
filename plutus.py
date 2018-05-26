@@ -7,6 +7,7 @@ import base58
 import time
 import sys
 import multiprocessing
+from multiprocessing import Process, Queue
 
 class pause: # Counts API failures for timeout
     p = 0
