@@ -46,7 +46,7 @@ python plutus.py
 
 This program is meant to analyze possible ways Bitcoin could be stolen. Because it is impossible to convert a wallet address back into its private key, this program goes the opposite way and generates a completely random private key, then converts it into its respective Bitcoin address. It then queries the calculated address for a balance and prints the result to the user.
 
-This program does this in a brute-force style, repeatedly generating and converting private keys, and querying balances. The ultimate goal is to randomly find a wallet with a balance out of the 2160 possible wallets in existence. In the event that a wallet with a balance is found, the wallet's private key, public key, wallet address, and balance is stored in a text file `plutus.txt`.
+This program does this in a brute-force style, repeatedly generating and converting private keys, and querying balances. The ultimate goal is to randomly find a wallet with a balance out of the 2<sup>160</sup> possible wallets in existence. In the event that a wallet with a balance is found, the wallet's private key, public key, wallet address, and balance are stored in a text file `plutus.txt`.
 
 Although this project can be used maliciously, it is simply an exploration into the Bitcoin protocol and advanced encryption and hashing techniques using Python.
 
@@ -62,7 +62,7 @@ The wallet addresses are queried using <a href="https://bitcoinlegacy.blockexplo
 
 If the wallet contains a balance, then the private key, public key, wallet address, and balance are saved to a text file `plutus.txt` on the user's hard drive.
 
-This program also utilizes multiprocessing through the `ThreadPool()`, `Process()`, and `pool.map()` functions. Multiprocessing maximizes the usage of your computer's cores, and consumes 100% of your computer's CPU.
+This program also utilizes multiprocessing through the `ThreadPool()`, `Process()`, and `pool.map()` functions. Multiprocessing maximizes the usage of your computer's cores, and consumes 100% of your computer's CPU to make the calculations faster.
 
 #
 
