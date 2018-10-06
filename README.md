@@ -82,6 +82,6 @@ However, if a balance is found, then the output will include all necessary infor
 
 #
 
-# Efficency
+# Efficiency
 
 On my tested machine, this program is able to brute force `4 wallets a second`, utilizing 100% of my computer's processing power.
