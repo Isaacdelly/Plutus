@@ -6,11 +6,11 @@ An automated bitcoin wallet collider that brute forces random wallet addresses w
 
 # Improvements & TODO
 
-- [x] Multithreading has been improved
+- [x] Improve multiprocessing
 
-- [x] Small errors have been resolved
+- [x] Fix HTTP errors
 
-- [x] Dependencies are installed automatically when the program first starts
+- [x] Install dependencies when the project starts
 
 - [ ] Create a GUI
 
@@ -46,7 +46,7 @@ python plutus.py
 
 This program is meant to analyze possible ways Bitcoin could be stolen. Because it is impossible to convert a wallet address back into its private key, this program goes the opposite way and generates a completely random private key, then converts it into its respective Bitcoin address. It then queries the calculated address for a balance and prints the result to the user.
 
-This program does this in a brute-force style, repeatedly generating and converting private keys, and querying balances. The ultimate goal is to randomly find a wallet with a balance out of the 2160 possible wallets in existence. In the event that a wallet with a balance is found, the wallet's private key, public key, wallet address, and balance is stored in a text file `plutus.txt` for later use.
+This program does this in a brute-force style, repeatedly generating and converting private keys, and querying balances. The ultimate goal is to randomly find a wallet with a balance out of the 2160 possible wallets in existence. In the event that a wallet with a balance is found, the wallet's private key, public key, wallet address, and balance is stored in a text file `plutus.txt`.
 
 Although this project can be used maliciously, it is simply an exploration into the Bitcoin protocol and advanced encryption and hashing techniques using Python.
 
@@ -58,7 +58,7 @@ Private keys are generated randomly to create a 32 byte hexidecimal string using
 
 The private keys are converted into their respective public keys. Then the public keys are converted into their Bitcoin wallet addresses using the `binascii`, `ecdsa`, and `hashlib` Python modules.
 
-The wallet addresses are queried using <a href="https://bitcoinlegacy.blockexplorer.com/api-ref" target="_Blank">Block Explorer API</a> to collect balance details.
+The wallet addresses are queried using <a href="https://bitcoinlegacy.blockexplorer.com/api-ref" target="_blank">Block Explorer API</a> to collect balance details.
 
 If the wallet contains a balance, then the private key, public key, wallet address, and balance are saved to a text file `plutus.txt` on the user's hard drive.
 
@@ -84,4 +84,4 @@ However, if a balance is found, then the output will include all necessary infor
 
 # Efficency
 
-Currenty on my tested machine, this program is able to brute force `4 wallets a second`, utilizing 100% of my computer's processing power.
+On my tested machine, this program is able to brute force `4 wallets a second`, utilizing 100% of my computer's processing power.
