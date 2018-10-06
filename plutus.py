@@ -1,189 +1,123 @@
 # Plutus Bitcoin Brute Forcer
 # Made by Isaac Delly
 # https://github.com/Isaacdelly/Plutus
-# Donate: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa
 
-import requests
-import os
-import binascii
-import ecdsa
-import hashlib
-import base58
-import time
-import sys
-from multiprocessing import Process, Queue
+try:
+    import sys
+    import os
+    import time
+    import hashlib
+    import binascii
+    import multiprocessing
+    from multiprocessing import Process, Queue
+    from multiprocessing.pool import ThreadPool
+    import threading
+    import base58
+    import ecdsa
+    import requests
+except ImportError:
+    import subprocess
+    subprocess.check_call(["python", '-m', 'pip', 'install', 'base58==1.0.0'])
+    subprocess.check_call(["python", '-m', 'pip', 'install', 'ecdsa==0.13'])
+    subprocess.check_call(["python", '-m', 'pip', 'install', 'requests==2.19.1'])
+    import base58
+    import ecdsa
+    import requests
 
-class pause: # Counts API failures for timeout
-    p = 0
-
-def privateKey(): # Generates random 256 bit private key in hex format
+def generate_private_key():
     return binascii.hexlify(os.urandom(32)).decode('utf-8')
 
-def publicKey(privatekey): # Private Key -> Public Key
-    privatekey = binascii.unhexlify(privatekey)
-    s = ecdsa.SigningKey.from_string(privatekey, curve = ecdsa.SECP256k1)
-    return '04' + binascii.hexlify(s.verifying_key.to_string()).decode('utf-8')
+def private_key_to_WIF(private_key):
+    var80 = "80" + str(private_key) 
+    var = hashlib.sha256(binascii.unhexlify(hashlib.sha256(binascii.unhexlify(var80)).hexdigest())).hexdigest()
+    return str(base58.b58encode(binascii.unhexlify(str(var80) + str(var[0:8]))), 'utf-8')
 
-def address(publickey): # Public Key -> Wallet Address
+def private_key_to_public_key(private_key):
+    sign = ecdsa.SigningKey.from_string(binascii.unhexlify(private_key), curve = ecdsa.SECP256k1)
+    return ('04' + binascii.hexlify(sign.verifying_key.to_string()).decode('utf-8'))
+
+def public_key_to_address(public_key):
     alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-    c = '0'; byte = '00'; zero = 0
+    count = 0; val = 0
     var = hashlib.new('ripemd160')
-    var.update(hashlib.sha256(binascii.unhexlify(publickey.encode())).digest())
-    a = (byte + var.hexdigest())
-    doublehash = hashlib.sha256(hashlib.sha256(binascii.unhexlify(a.encode())).digest()).hexdigest()
-    address = a + doublehash[0:8]
+    var.update(hashlib.sha256(binascii.unhexlify(public_key.encode())).digest())
+    doublehash = hashlib.sha256(hashlib.sha256(binascii.unhexlify(('00' + var.hexdigest()).encode())).digest()).hexdigest()
+    address = '00' + var.hexdigest() + doublehash[0:8]
     for char in address:
-        if (char != c):
+        if (char != '0'):
             break
-        zero += 1
-    zero = zero // 2
+        count += 1
+    count = count // 2
     n = int(address, 16)
     output = []
     while (n > 0):
         n, remainder = divmod (n, 58)
         output.append(alphabet[remainder])
-    count = 0
-    while (count < zero):
+    while (val < count):
         output.append(alphabet[0])
-        count += 1
+        val += 1
     return ''.join(output[::-1])
 
-def balance(address): # Query API for wallet balance
+def get_balance(address):
     try:
         API = requests.get("https://bitcoinlegacy.blockexplorer.com/api/addr/" + str(address) + "/balance")
-        if (API.status_code == 429):
-            pause.p += 1
-            if (pause.p >= 10):
-                print ("\nUnable to connect to API after several attempts\nRetrying in 30 seconds\n")
-                time.sleep(30)
-                pause.p = 0
-                return -1
-            print("\nHTTP Error Code: " + str(API.status_code) + "\n")
-            return -1
         if (API.status_code != 200 and API.status_code != 400):
-            print("\nHTTP Error Code: " + str(API.status_code) + "\nRetrying in 5 seconds\n")
-            time.sleep(5)
-            return -1
-        balance = int(API.text)
-        pause.p = 0
-        return balance
+            time.sleep(multiprocessing.cpu_count())
+            return 0
+        return int(API.text) 
     except:
-        pause.p += 1
-        if (pause.p >= 10):
-            print ("\nUnable to connect to API after several attempts\nRetrying in 30 seconds\n")
-            time.sleep(30)
-            pause.p = 0   
-        return -1
-
-def toWIF(privatekey): # Hex Private Key -> WIF format
-    var80 = "80" + str(privatekey) 
-    var = hashlib.sha256(binascii.unhexlify(hashlib.sha256(binascii.unhexlify(var80)).hexdigest())).hexdigest()
-    return str(base58.b58encode(binascii.unhexlify(str(var80) + str(var[0:8]))))
-
-def Plutus(): # Main Plutus Function
-    data = [0,0,0,0]
+        time.sleep(multiprocessing.cpu_count())
+        return 0
+    
+def data_export(queue):
     while True:
-        data[0] = privateKey()
-        data[1] = publicKey(data[0])
-        data[2] = address(data[1])
-        data[3] = balance(data[2])
-        if (data[3] == -1):
-            continue
-        if (data[3] == 0):
-            print("{:<34}".format(str(data[2])) + " = " + str(data[3]))
-        if (data[3] > 0):
-            print ("\naddress: " + str(data[2]) + "\n" +
-                   "private key: " + str(data[0]) + "\n" +
-                   "WIF private key: " + str(toWIF(str(data[0]))) + "\n" +
-                   "public key: " + str(data[1]).upper() + "\n" +
-                   "balance: " + str(data[3]) + "\n")
-            file = open("plutus.txt","a")
-            file.write("address: " + str(data[2]) + "\n" +
-                       "private key: " + str(data[0]) + "\n" +
-                       "WIF private key: " + str(toWIF(str(data[0]))) + "\n" +
-                       "public key: " + str(data[1]).upper() + "\n" +
-                       "balance: " + str(data[3]) + "\n" +
-                       "Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa\n\n")
-            file.close()
-
-### Multiprocessing Extension Made By Wayne Yao https://github.com/wx-Yao ###
-            
-def put_dataset(queue):
-    while True:
-        if queue.qsize() > 100:
-            time.sleep(10)
+        if queue.qsize() < 100:
+            private_key = generate_private_key()
+            public_key = private_key_to_public_key(private_key)
+            address = public_key_to_address(public_key)
+            data = (private_key, address)
+            queue.put(data, block = False)
         else:
-            privatekey = privateKey()
-            publickey = publicKey(privatekey)
-            Address = address(publickey)
-            WIF = toWIF(privatekey)
-            dataset = (Address, privatekey, publickey, WIF)
-            queue.put(dataset, block = False)
-    return None
+            time.sleep(1)
 
 def worker(queue):
-    time.sleep(1)
     while True:
         if queue.qsize() > 0:
-            dataset = queue.get(block = True)
-            balan = balance(dataset[0])
-            process_balance(dataset, balan)
-        else:
-            time.sleep(3)
-    return None
+            data = queue.get(block = True)
+            balance = get_balance(data[1])
+            process(data, balance)
 
-def process_balance(dataset,balance):
-    if balance == -1 :
-        return None
-    elif balance == 0 :
-        print("{:<34}".format(str(dataset[0])) + " = " + str(balance))
-        return None
-    else:
-        addr = dataset[0]
-        privatekey = dataset[1]
-        publickey = dataset[2]
-        WIF = dataset[3]
+def process(data, balance):
+    private_key = data[0]
+    address = data[1]
+    if (balance == 0):
+        print("{:<34}".format(str(address)) + ": " + str(balance))
+    if (balance > 0):
         file = open("plutus.txt","a")
-        file.write("address: " + str(addr) + "\n" +
-                   "private key: " + str(privatekey) + "\n" +
-                   "WIF private key: " + str(WIF) + "\n" +
-                   "public key: " + str(publickey).upper() + "\n" +
-                   "balance: " + str(balance) + "\n" +
-                   "Donate to the author of this program: 1B1k2fMs6kEmpxdYor6qvd2MRVUX2zGEHa\n\n")
+        file.write("address: " + str(address) + "\n" +
+                   "private key: " + str(private_key) + "\n" +
+                   "WIF private key: " + str(private_key_to_WIF(private_key)) + "\n" +
+                   "public key: " + str(private_key_to_public_key(private_key)).upper() + "\n" +
+                   "balance: " + str(balance) + "\n\n")
         file.close()
-    return None
 
-def multi():
+def thread(iterator):
     processes = []
-    dataset = Queue()
-    datasetProducer = Process(target = put_dataset, args = (dataset,))
-    datasetProducer.daemon = True
-    processes.append(datasetProducer)
-    datasetProducer.start()
-    for core in range(4):
-        work = Process(target = worker, args = (dataset,))
-        work.deamon = True
-        processes.append(work)
-        work.start()
-    try:
-        datasetProducer.join()
-    except KeyboardInterrupt:
-        for process in processes:
-            process.terminate()
-        print('\n\n------------------------\nALL PROCESSES TERMINATED\n')
-
-### End of Multiprocessing Extension ###
-
-def main():
-    if ("-m" in sys.argv):
-        print("\n-------- MULTIPROCESSING MODE ACTIVATED --------\n")
-        time.sleep(3)
-        print("\n|-------- Wallet Address --------| = Balance in Satoshi")
-        multi()
-    else:
-        print("\n|-------- Wallet Address --------| = Balance in Satoshi")
-        Plutus()
-
+    data = Queue()
+    data_factory = Process(target = data_export, args = (data,))
+    data_factory.daemon = True
+    processes.append(data_factory)
+    data_factory.start()
+    work = Process(target = worker, args = (data,))
+    work.daemon = True
+    processes.append(work)
+    work.start()
+    data_factory.join()
+              
 if __name__ == '__main__':
-    main()
-            
+    try:
+        pool = ThreadPool(processes = multiprocessing.cpu_count()*2)
+        pool.map(thread, range(0, 10))
+    except:
+        pool.close()
+        exit()
