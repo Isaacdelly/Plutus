@@ -54,7 +54,7 @@ Private keys are generated randomly to create a 32 byte hexidecimal string using
 
 The private keys are converted into their respective public keys. Then the public keys are converted into their Bitcoin wallet addresses using the `binascii`, `ecdsa`, and `hashlib` Python modules.
 
-The wallet addresses are queried using <a href="https://bitaps.com/api/" target="_blank">Bitaps</a> to collect balance details.
+The wallet addresses are queried using <a href="https://bitaps.com/api/" target="_blank">Bitaps Rest API</a> to collect balance details.
 
 If the wallet contains a balance, then the private key, public key, wallet address, and balance are saved to a text file `plutus.txt` on the user's hard drive.
 
