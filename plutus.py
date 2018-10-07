@@ -61,7 +61,7 @@ def public_key_to_address(public_key):
 def get_balance(address):
     try:
         API = response = requests.get("https://bitaps.com/api/address/" + str(address))
-        if (API.status_code != 200 and API.status_code != 400):
+        if (API.status_code != 200):
             return -1
         return int(API.json()['balance']) 
     except:
