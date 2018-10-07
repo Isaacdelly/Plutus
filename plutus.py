@@ -62,12 +62,10 @@ def get_balance(address):
     try:
         API = requests.get("https://bitcoinlegacy.blockexplorer.com/api/addr/" + str(address) + "/balance")
         if (API.status_code != 200 and API.status_code != 400):
-            time.sleep(1)
-            return 0
+            return -1
         return int(API.text) 
     except:
-        time.sleep(1)
-        return 0
+        return -1
     
 def data_export(queue):
     while True:
