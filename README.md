@@ -12,9 +12,9 @@ An automated bitcoin wallet collider that brute forces random wallet addresses w
 
 - [x] Install dependencies when the project starts
 
-- [ ] Create a GUI
+- [X] Find a way to avoid 429 errors from API
 
-- [ ] Find an alternative to an API for balance requests
+- [ ] Create a GUI
 
 <br/>
 
@@ -58,7 +58,7 @@ Private keys are generated randomly to create a 32 byte hexidecimal string using
 
 The private keys are converted into their respective public keys. Then the public keys are converted into their Bitcoin wallet addresses using the `binascii`, `ecdsa`, and `hashlib` Python modules.
 
-The wallet addresses are queried using <a href="https://bitcoinlegacy.blockexplorer.com/api-ref" target="_blank">Block Explorer API</a> to collect balance details.
+The wallet addresses are queried using <a href="hhttps://bitaps.com/api/" target="_blank">Bitaps</a> to collect balance details.
 
 If the wallet contains a balance, then the private key, public key, wallet address, and balance are saved to a text file `plutus.txt` on the user's hard drive.
 
@@ -85,3 +85,11 @@ However, if a balance is found, then the output will include all necessary infor
 # Efficiency
 
 On my tested machine, this program is able to brute force `4 wallets a second`, utilizing 100% of my computer's processing power.
+
+#
+
+# Appreciation
+
+Thanks to <a href="https://github.com/wx-Yao">Wayne Yao<a/> for help with multiprocessing
+  
+Thanks to <a href="https://github.com/PsyShark">PsyShark</a> for a better API alternative
