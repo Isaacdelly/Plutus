@@ -60,10 +60,10 @@ def public_key_to_address(public_key):
 
 def get_balance(address):
     try:
-        API = requests.get("https://bitcoinlegacy.blockexplorer.com/api/addr/" + str(address) + "/balance")
+        API = response = requests.get("https://bitaps.com/api/address/" + str(address))
         if (API.status_code != 200 and API.status_code != 400):
             return -1
-        return int(API.text) 
+        return int(API.json()['balance']) 
     except:
         return -1
     
