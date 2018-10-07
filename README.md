@@ -6,13 +6,9 @@ An automated bitcoin wallet collider that brute forces random wallet addresses w
 
 # Improvements & TODO
 
-- [x] Improve multiprocessing
+- [x] Improve multiprocessing and overall speed
 
-- [x] Fix HTTP errors
-
-- [x] Install dependencies when the project starts
-
-- [X] Find a way to avoid 429 errors from API
+- [X] Prevent 429 errors from slowing down program
 
 - [ ] Create a GUI
 
