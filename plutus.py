@@ -64,8 +64,8 @@ def get_balance(address):
         req = Request('GET', "https://bitaps.com/api/address/" + str(address))
         prepped = s.prepare_request(req)
         settings = s.merge_environment_settings(prepped.url, None, None, None, None)
-        API = s.send(prepped, **settings)
-        return int(API.json()['balance']) 
+        response = s.send(prepped, **settings)
+        return int(response.json()['balance']) 
     except:
         return -1
     
