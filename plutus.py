@@ -14,7 +14,7 @@ try:
     import threading
     import base58
     import ecdsa
-    from requests import Request, Session
+    import requests
 except ImportError:
     import subprocess
     subprocess.check_call(["python", '-m', 'pip', 'install', 'base58==1.0.0'])
@@ -22,7 +22,7 @@ except ImportError:
     subprocess.check_call(["python", '-m', 'pip', 'install', 'requests==2.19.1'])
     import base58
     import ecdsa
-    from requests import Request, Session
+    import requests
 
 def generate_private_key():
     return binascii.hexlify(os.urandom(32)).decode('utf-8')
@@ -60,14 +60,9 @@ def public_key_to_address(public_key):
 
 def get_balance(address):
     try:
-        s = Session()
-        req = Request('GET', "https://bitaps.com/api/address/" + str(address))
-        prepped = s.prepare_request(req)
-        settings = s.merge_environment_settings(prepped.url, None, None, None, None)
-        response = s.send(prepped, **settings)
+        response = requests.get("https://bitaps.com/api/address/" + str(address))
         return int(response.json()['balance']) 
-    except Exception as exception:
-        print(str(exception))
+    except:
         return -1
     
 def data_export(queue):
