@@ -67,18 +67,15 @@ def get_balance(address):
     
 def data_export(queue):
     while True:
-        if queue.qsize() < 100:
-            private_key = generate_private_key()
-            public_key = private_key_to_public_key(private_key)
-            address = public_key_to_address(public_key)
-            data = (private_key, address)
-            queue.put(data, block = False)
-        else:
-            time.sleep(1)
+        private_key = generate_private_key()
+        public_key = private_key_to_public_key(private_key)
+        address = public_key_to_address(public_key)
+        data = (private_key, address)
+        queue.put(data, block = False)
 
 def worker(queue):
     while True:
-        if queue.qsize() > 0:
+        if !queue.empty():
             data = queue.get(block = True)
             balance = get_balance(data[1])
             process(data, balance)
