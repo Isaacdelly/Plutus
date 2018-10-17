@@ -75,7 +75,7 @@ def data_export(queue):
 
 def worker(queue):
     while True:
-        if !queue.empty():
+        if not queue.empty():
             data = queue.get(block = True)
             balance = get_balance(data[1])
             process(data, balance)
