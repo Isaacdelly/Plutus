@@ -4,7 +4,6 @@
 
 try:
     import sys
-    import ssl
     import os
     import time
     import hashlib
@@ -24,8 +23,6 @@ except ImportError:
     import base58
     import ecdsa
     import requests
-
-ssl._create_default_https_context = ssl._create_unverified_context
 
 def generate_private_key():
     return binascii.hexlify(os.urandom(32)).decode('utf-8')
