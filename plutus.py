@@ -24,6 +24,10 @@ except ImportError:
     import ecdsa
     import requests
 
+requests.packages.urllib3.disable_warnings()
+context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+context.verify_mode = ssl.CERT_NONE
+
 def generate_private_key():
     return binascii.hexlify(os.urandom(32)).decode('utf-8')
 
