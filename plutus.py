@@ -62,8 +62,7 @@ def get_balance(address):
     try:
         response = requests.get("https://bitaps.com/api/address/" + str(address))
         return int(response.json()['balance']) 
-    except Exception as e:
-        print(e)
+    except:
         return -1
     
 def data_export(queue):
