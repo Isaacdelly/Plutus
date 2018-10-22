@@ -24,9 +24,7 @@ except ImportError:
     import ecdsa
     import requests
 
-requests.packages.urllib3.disable_warnings()
-context = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
-context.verify_mode = ssl.CERT_NONE
+ssl._create_default_https_context = ssl._create_unverified_context
 
 def generate_private_key():
     return binascii.hexlify(os.urandom(32)).decode('utf-8')
