@@ -25,7 +25,7 @@ def generate_private_key():
     return binascii.hexlify(os.urandom(32)).decode('utf-8')
 
 def private_key_to_WIF(private_key):
-    var80 = "80" + str(private_key) 
+    var80 = '80' + str(private_key) 
     var = hashlib.sha256(binascii.unhexlify(hashlib.sha256(binascii.unhexlify(var80)).hexdigest())).hexdigest()
     return str(base58.b58encode(binascii.unhexlify(str(var80) + str(var[0:8]))), 'utf-8')
 
