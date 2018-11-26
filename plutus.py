@@ -12,6 +12,8 @@ try:
     import base58
     import ecdsa
     import requests
+    # For some weird exceptions that might occur
+    from requests.exceptions import *
 except ImportError:
     import subprocess
     subprocess.check_call(["python", '-m', 'pip', 'install', 'base58==1.0.0'])
@@ -20,6 +22,14 @@ except ImportError:
     import base58
     import ecdsa
     import requests
+
+
+# Presumably rate-limiting or static IP blocking, could also be server down
+# for maintenance
+bci_blocked = False
+bitaps_blocked = False
+btc_blocked = False
+
 
 def generate_private_key():
     return binascii.hexlify(os.urandom(32)).decode('utf-8')
@@ -55,11 +65,111 @@ def public_key_to_address(public_key):
         val += 1
     return ''.join(output[::-1])
 
+#
+#   We could add a round-robin option, where the function cycles through
+#   the get_balance API options, so it doesn't repeatedly hit the same
+#   API too quickly.  In the event an API is down for some reason, it
+#   will just move onto the next API.  If they're all down, though, the
+#   program will just have to save the addresses, and add an option, e.g.
+#   plutus.py --check --file=addresses.txt that it saved because the
+#   APIs were down, or no Internet connection/sparodic connectivity
+#   for a while.  Otherwise specify --no-api-stop if the program should
+#   just quit if all are down.
+#
+#   https://tools.ietf.org/html/rfc6585#page-3
+#
+#   TODO: Proper 429 handling, and see if the server gives us a retry-after
+#   header.  In that case, we could sleep for that number of seconds, then
+#   keep going.  It might be helpful to calculate the number of requests
+#   over a time interval before getting a 429, if the server does that with
+#   a retry-after header, so we know how many we can do for each API.
+#
 def get_balance(address):
+    
+    # TODO: undo the blocking some time, if we receive a valid HTTP
+    # header from a server with Retry-After set, if we get a HTTP/1.1 429.
+    global bci_blocked
+    global bitaps_blocked
+    global btc_blocked
+
+    # Where do we get the response.status_code for 429?
+    # A valid response or in an exception?
+    if not bci_blocked:
+        return bci_balance(address)
+    elif not bitaps_blocked:
+        return bitaps_balance(address)
+    elif not btc_blocked:
+        return btc_balance(balance)
+    else:
+        print("Run out of options, blocked from Blockchain, BitAps and BTC.com")
+
+    return -1
+
+def bci_balance(address):
+    global bci_blocked
+    response = None
     try:
-        response = requests.get("https://bitaps.com/api/address/" + str(address))
-        return int(response.json()['balance']) 
-    except:
+        response = requests.get("https://blockchain.info/rawaddr/{}".format(address), timeout=None)
+        if response.status_code == 429:
+            bci_blocked = True
+            print("We're blocked from BCI.")
+            return -1
+        balance = 0
+        try:
+            balance = response.json()['final_balance']
+        except:
+            print("Probably a JSONDecodeError, resuming...")
+            pass
+        return int(balance)
+    except (ConnectionError, RequestException, HTTPError, ProxyError, SSLError, Timeout, ConnectTimeout, ReadTimeout, InvalidHeader, ChunkedEncodingError, ContentDecodingError) as e:
+        print("Exception caught: {}".format(e))
+        # Should we really do this or keep trying?
+        bci_blocked = True
+        return -1
+
+def bitaps_balance(address):
+    global bitaps_blocked
+    response = None
+    try:
+        response = requests.get("https://bitaps.com/api/address/{}".format(address), timeout=None)
+        if response.status_code == 429:
+            bitaps_blocked = True
+            print("We're blocked from Bitaps.")
+            return -1
+        balance = 0
+        try:
+            balance = response.json()['balance']
+        except:
+            print("Probably a JSONDecodeError, resuming...")
+            pass
+        return int(balance)
+    except (ConnectionError, RequestException, HTTPError, ProxyError, SSLError, Timeout, ConnectTimeout, ReadTimeout, InvalidHeader, ChunkedEncodingError, ContentDecodingError) as e:
+        print("Exception caught: {}".format(e))
+        # Should we really do this or keep trying?
+        bitaps_blocked = True
+        return -1
+
+# balance = response.json()['data']['balance']
+def btc_balance(address):
+    global btc_blocked
+    response = None
+    try:
+        response = requests.get("https://chain.api.btc.com/v3/address/{}".format(address), timeout=None)
+        if response.status_code == 429:
+            btc_blocked = True
+            print("We're blocked from BTC.com.")
+            return -1
+        balance = 0
+        try:
+            balance = response.json()['data']['balance']
+        except:
+            print("Probably a JSONDecodeError, resuming...")
+            pass
+        return int(balance)
+    except (ConnectionError, RequestException, HTTPError, ProxyError, SSLError, Timeout, ConnectTimeout, ReadTimeout, InvalidHeader, ChunkedEncodingError, ContentDecodingError) as e:
+        print("Exception caught: {}".format(e))
+        # Should we really do this or keep trying?
+        btc_blocked = True
         return -1
     
 def data_export(queue):
@@ -105,6 +215,11 @@ def thread(iterator):
     data_factory.join()
               
 if __name__ == '__main__':
+    
+    bci_blocked = False
+    bitaps_blocked = False
+    btc_blocked = False
+
     try:
         pool = ThreadPool(processes = multiprocessing.cpu_count()*2)
         pool.map(thread, range(0, 10))
