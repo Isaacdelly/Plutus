@@ -10,6 +10,8 @@ An automated bitcoin wallet collider that brute forces random wallet addresses w
 
 - [X] Prevent 429 errors from slowing down program
 
+- Problems sharing 429 errors across threads, please don't use this version!!!
+
 - [ ] Create a GUI
 
 <br/>
