@@ -2,13 +2,14 @@
 # Made by Isaac Delly
 # https://github.com/Isaacdelly/Plutus
 
+
+import os
+import hashlib
+import binascii
+import multiprocessing
+from multiprocessing import Process, Queue
+from multiprocessing.pool import ThreadPool
 try:
-    import os
-    import hashlib
-    import binascii
-    import multiprocessing
-    from multiprocessing import Process, Queue
-    from multiprocessing.pool import ThreadPool
     import base58
     import ecdsa
     import requests
@@ -25,7 +26,7 @@ def generate_private_key():
     return binascii.hexlify(os.urandom(32)).decode('utf-8')
 
 def private_key_to_WIF(private_key):
-    var80 = '80' + str(private_key) 
+    var80 = '80' + str(private_key)
     var = hashlib.sha256(binascii.unhexlify(hashlib.sha256(binascii.unhexlify(var80)).hexdigest())).hexdigest()
     return str(base58.b58encode(binascii.unhexlify(str(var80) + str(var[0:8]))), 'utf-8')
 
@@ -41,16 +42,16 @@ def public_key_to_address(public_key):
     doublehash = hashlib.sha256(hashlib.sha256(binascii.unhexlify(('00' + var.hexdigest()).encode())).digest()).hexdigest()
     address = '00' + var.hexdigest() + doublehash[0:8]
     for char in address:
-        if (char != '0'):
+        if char != '0':
             break
         count += 1
     count = count // 2
     n = int(address, 16)
     output = []
-    while (n > 0):
+    while n > 0:
         n, remainder = divmod (n, 58)
         output.append(alphabet[remainder])
-    while (val < count):
+    while val < count:
         output.append(alphabet[0])
         val += 1
     return ''.join(output[::-1])
@@ -58,10 +59,10 @@ def public_key_to_address(public_key):
 def get_balance(address):
     try:
         response = requests.get("https://bitaps.com/api/address/" + str(address))
-        return int(response.json()['balance']) 
+        return int(response.json()['balance'])
     except:
         return -1
-    
+
 def data_export(queue):
     while True:
         private_key = generate_private_key()
@@ -80,16 +81,16 @@ def worker(queue):
 def process(data, balance):
     private_key = data[0]
     address = data[1]
-    if (balance == 0):
+    if balance == 0:
         print("{:<34}".format(str(address)) + ": " + str(balance))
-    if (balance > 0):
-        file = open("plutus.txt","a")
-        file.write("address: " + str(address) + "\n" +
-                   "private key: " + str(private_key) + "\n" +
-                   "WIF private key: " + str(private_key_to_WIF(private_key)) + "\n" +
-                   "public key: " + str(private_key_to_public_key(private_key)).upper() + "\n" +
-                   "balance: " + str(balance) + "\n\n")
-        file.close()
+    if balance > 0:
+        with open("plutus.txt", "a") as f:
+            f.write("address: " + str(address) + "\n" +
+                    "private key: " + str(private_key) + "\n" +
+                    "WIF private key: " + str(private_key_to_WIF(private_key)) + "\n" +
+                    "public key: " + str(private_key_to_public_key(private_key)).upper() + "\n" +
+                    "balance: " + str(balance) + "\n\n")
+
 
 def thread(iterator):
     processes = []
@@ -103,7 +104,7 @@ def thread(iterator):
     processes.append(work)
     work.start()
     data_factory.join()
-              
+
 if __name__ == '__main__':
     try:
         pool = ThreadPool(processes = multiprocessing.cpu_count()*2)
