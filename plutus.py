@@ -91,7 +91,6 @@ def main(database):
         process(private_key, public_key, address, database) # 0.0000026941 seconds
                                                             # --------------------
                                                             # 0.0032457721 seconds
-                                                            # brute forces per second = 0.0032457721 ÷ cpu_count()
     
 if __name__ == '__main__':
     """Deserialize the database and read into a list of sets for easier selection and O(1) complexity. Initialize
