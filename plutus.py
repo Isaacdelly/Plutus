@@ -101,7 +101,7 @@ if __name__ == '__main__':
     half = count // 2; quarter = half // 2
     for c, p in enumerate(os.listdir(DATABASE)):
         with open(DATABASE + p, 'rb') as file:
-            print('reading database: ' + str(c+1) + '/' + str(count))
+            print('\rreading database: ' + str(c+1) + '/' + str(count), end='')
             if c < half:
                 if c < quarter: database[0] = database[0] | pickle.load(file)
                 else: database[1] = database[1] | pickle.load(file)
