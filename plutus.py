@@ -101,14 +101,14 @@ if __name__ == '__main__':
     half = count // 2; quarter = half // 2
     for c, p in enumerate(os.listdir(DATABASE)):
         with open(DATABASE + p, 'rb') as file:
-            print('reading database: ' + str(c+1) + '/' + str(count), end='', flush=TRUE)
+            print('reading database: ' + str(c+1) + '/' + str(count))
             if c < half:
                 if c < quarter: database[0] = database[0] | pickle.load(file)
                 else: database[1] = database[1] | pickle.load(file)
             else:
                 if c < half + quarter: database[2] = database[2] | pickle.load(file)
                 else: database[3] = database[3] | pickle.load(file)
-    print(' DONE')
+    print('DONE')
     with multiprocessing.Pool(multiprocessing.cpu_count()) as pool:
             pool.map(main(database), range(multiprocessing.cpu_count() * 2))
             
