@@ -1,1 +1,1 @@
-starkbank-ecdsa==0.1.4
+fastecdsa==1.6.5

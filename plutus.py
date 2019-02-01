@@ -7,8 +7,8 @@ import os
 import hashlib
 import binascii
 import multiprocessing
-from ellipticcurve.privateKey import PrivateKey
 
+from fastecdsa import curve, keys
 from bloom_filter import BloomFilter
 
 DATABASE = r'database/JAN_09_2019/'
@@ -19,7 +19,7 @@ def generate_private_key():
     """Generate a random 32-byte hex integer which serves as a randomly generated Bitcoin private key.
     Average Time: 0.0000061659 seconds
     """
-    return binascii.hexlify(os.urandom(32)).decode('utf-8').upper()
+    return keys.gen_private_key(curve.secp256k1)
 
 
 def private_key_to_public_key(private_key):
@@ -28,7 +28,8 @@ def private_key_to_public_key(private_key):
     in the overall speed of the program.
     Average Time: 0.0031567731 seconds
     """
-    return '04' + PrivateKey().fromString(bytes.fromhex(private_key)).publicKey().toString().hex().upper()
+    public_key = keys.get_public_key(private_key, curve.secp256k1)
+    return '04' + str((public_key.x).to_bytes(32, byteorder='big').hex()) + str((public_key.y).to_bytes(32, byteorder='big').hex())
 
 
 def public_key_to_address(public_key):
@@ -93,7 +94,7 @@ def main(bf):
         private_key = generate_private_key()                # 0.0000061659 seconds
         public_key = private_key_to_public_key(private_key) # 0.0031567731 seconds
         address = public_key_to_address(public_key)         # 0.0000801390 seconds
-        process(private_key, public_key, address, bf) # 0.0000026941 seconds
+        process(private_key, public_key, address, bf)       # 0.0000026941 seconds
                                                             # --------------------
                                                             # 0.0032457721 seconds
 
