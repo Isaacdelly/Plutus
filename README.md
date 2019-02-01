@@ -75,6 +75,10 @@ However, if a balance is found, then all necessary information about the wallet 
 
 - [X] Improve ECDSA signing speed
 
+- [ ] Add a counter
+
+- [ ] Use a bloom filter instead of a set?
+
 <br/>
 
 <a href="https://github.com/Isaacdelly/Plutus/issues">Create an issue</a> so I can add more stuff to improve
