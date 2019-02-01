@@ -108,7 +108,7 @@ if __name__ == '__main__':
             else:
                 if c < half + quarter: database[2] = database[2] | pickle.load(file)
                 else: database[3] = database[3] | pickle.load(file)
-    print('DONE')
+    print(' DONE')
     with multiprocessing.Pool(multiprocessing.cpu_count()) as pool:
             pool.map(main(database), range(multiprocessing.cpu_count() * 2))
             
