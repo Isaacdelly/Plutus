@@ -3,20 +3,24 @@
 # https://github.com/Isaacdelly/Plutus
 
 import os
-import pickle
+
 import hashlib
 import binascii
 import multiprocessing
 from ellipticcurve.privateKey import PrivateKey
-from ellipticcurve.publicKey import PublicKey
+
+from bloom_filter import BloomFilter
 
 DATABASE = r'database/JAN_09_2019/'
+BLOOM_FILTER_NAME = 'filter.bf'
+
 
 def generate_private_key(): 
     """Generate a random 32-byte hex integer which serves as a randomly generated Bitcoin private key.
     Average Time: 0.0000061659 seconds
     """
     return binascii.hexlify(os.urandom(32)).decode('utf-8').upper()
+
 
 def private_key_to_public_key(private_key):
     """Accept a hex private key and convert it to its respective public key. Because converting a private key to 
@@ -25,6 +29,7 @@ def private_key_to_public_key(private_key):
     Average Time: 0.0031567731 seconds
     """
     return '04' + PrivateKey().fromString(bytes.fromhex(private_key)).publicKey().toString().hex().upper()
+
 
 def public_key_to_address(public_key):
     """Accept a public key and convert it to its resepective P2PKH wallet address.
@@ -42,16 +47,14 @@ def public_key_to_address(public_key):
     [(output.append(alphabet[0]), ) for i in range(count)]
     return ''.join(output[::-1])
 
-def process(private_key, public_key, address, database):
+
+def process(private_key, public_key, address, bf):
     """Accept an address and query the database. If the address is found in the database, then it is assumed to have a 
     balance and the wallet data is written to the hard drive. If the address is not in the database, then it is 
     assumed to be empty and printed to the user. This is a fast and efficient query.
     Average Time: 0.0000026941 seconds
     """
-    if address in database[0] or \
-       address in database[1] or \
-       address in database[2] or \
-       address in database[3]:
+    if bf.lookup(address):
         with open('plutus.txt', 'a') as file:
             file.write('hex private key: ' + str(private_key) + '\n' +
                        'WIF private key: ' + str(private_key_to_WIF(private_key)) + '\n' +
@@ -59,6 +62,7 @@ def process(private_key, public_key, address, database):
                        'address: ' + str(address) + '\n\n')
     else: 
          print(str(address))
+
 
 def private_key_to_WIF(private_key):
     """Convert the hex private key into Wallet Import Format for easier wallet importing. This function is 
@@ -78,8 +82,9 @@ def private_key_to_WIF(private_key):
         if c == 0: pad += 1
         else: break
     return chars[0] * pad + result
-              
-def main(database):
+
+
+def main(bf):
     """Create the main pipeline by using an infinite loop to repeatedly call the functions, while utilizing 
     multiprocessing from __main__. Because all the functions are relatively fast, it is better to combine
     them all into one process.
@@ -88,10 +93,11 @@ def main(database):
         private_key = generate_private_key()                # 0.0000061659 seconds
         public_key = private_key_to_public_key(private_key) # 0.0031567731 seconds
         address = public_key_to_address(public_key)         # 0.0000801390 seconds
-        process(private_key, public_key, address, database) # 0.0000026941 seconds
+        process(private_key, public_key, address, bf) # 0.0000026941 seconds
                                                             # --------------------
                                                             # 0.0032457721 seconds
-    
+
+
 if __name__ == '__main__':
     """Deserialize the database and read into a list of sets for easier selection and O(1) complexity. Initialize
     the multiprocessing pool to target the main function with cpu_count() concurrent processes.
@@ -99,16 +105,11 @@ if __name__ == '__main__':
     database = [set() for _ in range(4)]
     count = len(os.listdir(DATABASE))
     half = count // 2; quarter = half // 2
-    for c, p in enumerate(os.listdir(DATABASE)):
-        with open(DATABASE + p, 'rb') as file:
-            print('\rreading database: ' + str(c+1) + '/' + str(count), end='')
-            if c < half:
-                if c < quarter: database[0] = database[0] | pickle.load(file)
-                else: database[1] = database[1] | pickle.load(file)
-            else:
-                if c < half + quarter: database[2] = database[2] | pickle.load(file)
-                else: database[3] = database[3] | pickle.load(file)
-    print(' DONE')
+    if os.path.exists(BLOOM_FILTER_NAME) and os.path.isfile(BLOOM_FILTER_NAME):
+        bf = BloomFilter.deserialize()
+    else:
+        BloomFilter.convert_db_to_bloom_filter()
+        bf = BloomFilter.deserialize()
     with multiprocessing.Pool(multiprocessing.cpu_count()) as pool:
-            pool.map(main(database), range(multiprocessing.cpu_count() * 2))
-            
+            pool.map(main(bf), range(multiprocessing.cpu_count() * 2))
+
