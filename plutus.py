@@ -10,7 +10,7 @@ import multiprocessing
 import fastecdsa
 import bloom_filter
 
-DATABASE = r'database/FEB_03_2019/'
+DATABASE = r'database/FEB_03_2019.pickle'
 
 def generate_private_key(): 
     """Generate a random 32-byte hex integer which serves as a randomly generated Bitcoin private key.
