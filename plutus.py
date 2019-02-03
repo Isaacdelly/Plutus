@@ -91,7 +91,7 @@ def main(database):
     
 if __name__ == '__main__':
     """Deserialize the database and load into a bloom filter. Initialize the multiprocessing pool to target the 
-    main function with cpu_count() * 2 concurrent processes.
+    main function with cpu_count() concurrent processes.
     """
     with open(DATABASE, 'rb') as file:
             database = pickle.load(file)
