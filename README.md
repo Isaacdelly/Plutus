@@ -12,7 +12,7 @@ An automated Bitcoin wallet collider that brute forces random wallet addresses
 
 Python modules listed in the <a href="/requirements.txt">requirements.txt<a/>
   
-Python C Wrapper and <a href="https://gmplib.org/">GMP</a>
+Python C Wrapper and <a href="https://gmplib.org/">GMP</a> Library
 
 # Installation
 
