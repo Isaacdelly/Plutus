@@ -4,7 +4,7 @@ This database is a serialized <a href="https://github.com/hiway/python-bloom-fil
 
 The database was created using a third-party program: <a href="https://github.com/graymauser/btcposbal2csv">btcposbal2csv</a> which generates a csv file of all Bitcoin addresses with a positive balance. The csv file was converted into a set, then the set converted into a bloom filter object, which then was serialized into a `.pickle` file. When the program runs, the file gets deserialized and used for a balance query.
 
-The name of the database file is the date when the database was last updated in month_day_year format. The database will be updated every 3-6 months.
+The name of the file is the date when the database was last updated in month_day_year format. The database will be updated every 3-6 months.
 
 ### How Many Addresses Does The Database Have?
 
