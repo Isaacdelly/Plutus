@@ -16,4 +16,4 @@ The bloom filter object is initialized with a XX error rate and XX bit size.
 
 ### How Can I Verify This Information?
 
-Before running the program, remove the hashtag on <a href="https://github.com/Isaacdelly/p/blob/master/plutus.py#L100">Line 100</a>. This will print and verify the information on this page.
+Before running the program, remove the hashtag on <a href="https://github.com/Isaacdelly/p/blob/master/plutus.py#L100">Line 100</a>. This will print the represented object and verify the information on this page.
