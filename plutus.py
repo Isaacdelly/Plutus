@@ -95,6 +95,10 @@ if __name__ == '__main__':
     """
     with open(DATABASE, 'rb') as file:
             database = pickle.load(file)
+      
+    # To verify the bloom filter configuration, remove the # from the line below
+    #print('Database Information: ' + repr(database))
+    
     with multiprocessing.Pool(multiprocessing.cpu_count()) as pool:
             pool.map(main(database), range(multiprocessing.cpu_count() * 2))
             
