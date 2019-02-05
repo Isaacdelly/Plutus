@@ -45,7 +45,7 @@ def process(private_key, public_key, address, database):
     """Accept an address and query the database. If the address is found in the database, then it is assumed to have a 
     balance and the wallet data is written to the hard drive. If the address is not in the database, then it is 
     assumed to be empty and printed to the user. This is a fast and efficient query.
-    Average Time: 0.0000026941 seconds
+    Average Time:  seconds
     """
     if address in database:
         with open('plutus.txt', 'a') as file:
@@ -84,7 +84,7 @@ def main(database):
         private_key = generate_private_key()                # 0.0000061659 seconds
         public_key = private_key_to_public_key(private_key) #  seconds
         address = public_key_to_address(public_key)         # 0.0000801390 seconds
-        process(private_key, public_key, address, database) # 0.0000026941 seconds
+        process(private_key, public_key, address, database) #  seconds
                                                             # --------------------
                                                             # seconds
                                                             # brute forces per second =  ÷ cpu_count()
