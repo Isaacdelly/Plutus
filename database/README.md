@@ -8,8 +8,12 @@ The name of the file is the date when the database was last updated in month_day
 
 ### How Many Addresses Does The Database Have?
 
-There are ~23 million Bitcoin addresses in the database. This is also the total number of Bitcoin addresses with a balance that exist in the blockchain.
+The database currently holds XXX Bitcoin addresses. This is also the total number of Bitcoin addresses with a balance that exist in the blockchain.
 
-### Bloom Filter FAQ
+### How Is The Bloom Filter Configured?
 
-The bloom filter is initialized with an error rate of 0.0001, and consumes a total of GB of RAM when held in virtual memory.
+The bloom filter object is initialized with a XX error rate and XX bit size.
+
+### How Can I Verify This Information?
+
+Before running the program, remove the hashtag on <a href="https://github.com/Isaacdelly/p/blob/master/plutus.py#L100">Line 100</a>. This will print and verify the information on this page.
