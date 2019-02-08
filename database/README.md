@@ -14,4 +14,4 @@ This can be verified by removing the hashtag on <a href="https://github.com/Isaa
 
 ### Why Are There So Many Files?
 
-There are multiple `.pickle` files because GitHub limits file uploads to 100 MB. The single serialized file is too large, so it was split into multiple files each under 100 MB in order to be uploaded to GitHub.
+There are multiple `.pickle` files because GitHub limits file uploads to 50 MB. The single serialized file is too large, so it was split into multiple files each under 50 MB in order to be uploaded to GitHub.
