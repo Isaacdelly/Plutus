@@ -7,10 +7,10 @@ import pickle
 import hashlib
 import binascii
 import multiprocessing
-import fastecdsa
-import bloom_filter
+from ellipticcurve.privateKey import PrivateKey
+from ellipticcurve.publicKey import PublicKey
 
-DATABASE = r'database/FEB_03_2019.pickle'
+DATABASE = r'database/FEB_03_2019/'
 
 def generate_private_key(): 
     """Generate a random 32-byte hex integer which serves as a randomly generated Bitcoin private key.
@@ -19,11 +19,12 @@ def generate_private_key():
     return binascii.hexlify(os.urandom(32)).decode('utf-8').upper()
 
 def private_key_to_public_key(private_key):
-    """Accept a hex private key and convert it to its respective public key using SECP256k1 ECDSA signing.
-    Average Time:  seconds
+    """Accept a hex private key and convert it to its respective public key. Because converting a private key to 
+    a public key requires SECP256k1 ECDSA signing, this function is the most time consuming and is a bottleneck
+    in the overall speed of the program.
+    Average Time: 0.0031567731 seconds
     """
-    public_key = fastecdsa.keys.get_public_key(private_key, fastecdsa.curve.secp256k1)
-    return '04' + public_key.x.to_bytes(32, byteorder='big').hex().upper() + public_key.y.to_bytes(32, byteorder='big').hex().upper()
+    return '04' + PrivateKey().fromString(bytes.fromhex(private_key)).publicKey().toString().hex().upper()
 
 def public_key_to_address(public_key):
     """Accept a public key and convert it to its resepective P2PKH wallet address.
@@ -45,9 +46,12 @@ def process(private_key, public_key, address, database):
     """Accept an address and query the database. If the address is found in the database, then it is assumed to have a 
     balance and the wallet data is written to the hard drive. If the address is not in the database, then it is 
     assumed to be empty and printed to the user. This is a fast and efficient query.
-    Average Time:  seconds
+    Average Time: 0.0000026941 seconds
     """
-    if address in database:
+    if address in database[0] or \
+       address in database[1] or \
+       address in database[2] or \
+       address in database[3]:
         with open('plutus.txt', 'a') as file:
             file.write('hex private key: ' + str(private_key) + '\n' +
                        'WIF private key: ' + str(private_key_to_WIF(private_key)) + '\n' +
@@ -82,22 +86,31 @@ def main(database):
     """
     while True:
         private_key = generate_private_key()                # 0.0000061659 seconds
-        public_key = private_key_to_public_key(private_key) #  seconds
+        public_key = private_key_to_public_key(private_key) # 0.0031567731 seconds
         address = public_key_to_address(public_key)         # 0.0000801390 seconds
-        process(private_key, public_key, address, database) #  seconds
+        process(private_key, public_key, address, database) # 0.0000026941 seconds
                                                             # --------------------
-                                                            # seconds
-                                                            # brute forces per second =  ÷ cpu_count()
+                                                            # 0.0032457721 seconds
     
 if __name__ == '__main__':
-    """Deserialize the database and load into a bloom filter. Initialize the multiprocessing pool to target the 
-    main function with cpu_count() concurrent processes.
+    """Deserialize the database and read into a list of sets for easier selection and O(1) complexity. Initialize
+    the multiprocessing pool to target the main function with cpu_count() concurrent processes.
     """
-    with open(DATABASE, 'rb') as file:
-            database = pickle.load(file)
-      
-    # To verify the bloom filter configuration, remove the # from the line below
-    #print('Database Information: ' + repr(database))
+    database = [set() for _ in range(4)]
+    count = len(os.listdir(DATABASE))
+    half = count // 2; quarter = half // 2
+    for c, p in enumerate(os.listdir(DATABASE)):
+        print('reading database: ' + str(c) + '/' + str(count), end='\r')
+        with open(DATABASE + p, 'rb') as file:
+            if c < half:
+                if c < quarter: database[0] = database[0] | pickle.load(file)
+                else: database[1] = database[1] | pickle.load(file)
+            else:
+                if c < half + quarter: database[2] = database[2] | pickle.load(file)
+                else: database[3] = database[3] | pickle.load(file)
+    
+    # To verify the database size, remove the # from the line below
+    #print('Database Size: ' + str(sum(len(i) for i in database))); quit()
     
     with multiprocessing.Pool(multiprocessing.cpu_count()) as pool:
             pool.map(main(database), range(multiprocessing.cpu_count() * 2))

@@ -1,19 +1,17 @@
 # Database FAQ
 
-This database is a serialized <a href="https://github.com/hiway/python-bloom-filter">bloom filter</a> of all Bitcoin addresses with a positive balance.
+This database is a serialized `set()` of all Bitcoin addresses with a positive balance.
 
-The database was created using a third-party program: <a href="https://github.com/graymauser/btcposbal2csv">btcposbal2csv</a> which generates a csv file of all Bitcoin addresses with a positive balance. The csv file was converted into a set, then the set was converted into a bloom filter object, which was then serialized into a `.pickle` file. When the program runs, the file gets deserialized back into a bloom filter object and is used for a balance query.
+The database was created using a third-party program: <a href="https://github.com/graymauser/btcposbal2csv">btcposbal2csv</a> which generates a csv file of all Bitcoin addresses with a positive balance. The csv file was converted into a set and the set was serialized into several `.pickle` files each holding 1,000,000 Bitcoin addresses. When the program runs, the files in the database get deserialized and combined to be used for a balance query.
 
-The name of the file is the date when the database was last updated in month_day_year format. The database will be updated every 3-6 months.
+The name of the database folder is the date when the database was last updated in month_day_year format. The database will be updated every 3-6 months.
 
 ### How Many Addresses Does The Database Have?
 
-The database currently holds XXX Bitcoin addresses. This is also the total number of Bitcoin addresses with a balance that exist in the blockchain.
+The database currently holds `22,514,712 Bitcoin addresses`. This is also the total number of Bitcoin addresses with a balance that exist in the blockchain.
 
-### How Is The Bloom Filter Configured?
+This can be verified by removing the hashtag on <a href=https://github.com/Isaacdelly/p/blob/master/plutus.py#L113>Line 113</a> before running the program. This will print the size of the database.
 
-The bloom filter object is initialized with a XX error rate and XX bit size.
+### Why Are There So Many Files?
 
-### How Can I Verify This Information?
-
-Before running the program, remove the hashtag on <a href="https://github.com/Isaacdelly/p/blob/master/plutus.py#L100">Line 100</a>. This will print the represented object and verify the information on this page.
+There are multiple `.pickle` files because GitHub limits file uploads to 100 MB. The single serialized file is too large, so it was split into multiple files each under 100 MB in order to be uploaded to GitHub.

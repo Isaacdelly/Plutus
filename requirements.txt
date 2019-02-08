@@ -1,2 +1,1 @@
-bloom-filter==1.3
-fastecdsa==1.6.5
+starkbank-ecdsa==0.1.4

@@ -11,9 +11,6 @@ An automated Bitcoin wallet collider that brute forces random wallet addresses
 <a href="https://www.python.org/downloads/">Python 3.6</a> or higher
 
 Python modules listed in the <a href="/requirements.txt">requirements.txt<a/>
-  
-Python C Wrapper and <a href="https://gmplib.org/">GMP</a> Library
-###### All these dependencies will be installed below at <a href="#Installation">Installation</a>
 
 # Installation
 
@@ -21,8 +18,6 @@ Python C Wrapper and <a href="https://gmplib.org/">GMP</a> Library
 $ git clone https://github.com/Isaacdelly/Plutus.git plutus
 
 $ cd plutus && pip install -r requirements.txt
-
-$ sudo apt-get install python-dev libgmp3-dev
 ```
 
 # Quick Start
@@ -43,7 +38,7 @@ This program is essentially a brute forcing algorithm. It continuously generates
 
 Private keys are generated randomly to create a 32 byte hexidecimal string using the cryptographically secure `os.urandom()` function.
 
-The private keys are converted into their respective public keys using the `fastecdsa` Python module. Then the public keys are converted into their Bitcoin wallet addresses using the `binascii` and `hashlib` standard libraries.
+The private keys are converted into their respective public keys using the `starkbank-ecdsa` Python module. Then the public keys are converted into their Bitcoin wallet addresses using the `binascii` and `hashlib` standard libraries.
 
 A pre-calculated database of every Bitcoin address with a positive balance is included in this project. The generated address is searched within the database, and if it is found that the address has a balance, then the private key, public key and wallet address are saved to the text file `plutus.txt` on the user's hard drive.
 
@@ -51,9 +46,9 @@ This program also utilizes multiprocessing through the `multiprocessing.Pool()` 
 
 # Efficiency
 
-It takes ` ` seconds for this progam to brute force a __single__ Bitcoin address. 
+It takes `0.0032457721` seconds for this progam to brute force a __single__ Bitcoin address. 
 
-However, through `multiprocessing.Pool()` a concurrent process is created for every CPU your computer has. So this program can brute force addresses at a speed of ` ÷ cpu_count()` seconds.
+However, through `multiprocessing.Pool()` a concurrent process is created for every CPU your computer has. So this program can brute force addresses at a speed of `0.0032457721 ÷ cpu_count()` seconds.
 
 # Database FAQ
 
@@ -74,9 +69,9 @@ However, if a balance is found, then all necessary information about the wallet 
 
 # Recent Improvements & TODO
 
-- [X] Query balances using a bloom filter
+- [X] Use a set instead of a bloom filter
 
-- [X] Improve ECDSA signing speed
+- [ ] Add a counter
 
 <br/>
 
