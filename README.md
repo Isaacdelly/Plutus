@@ -69,9 +69,9 @@ However, if a balance is found, then all necessary information about the wallet 
 
 # Recent Improvements & TODO
 
-- [X] Use a set instead of a bloom filter
+- [X] Use a set to store the database
 
-- [ ] Add a counter
+- [ ] Improve terminal output
 
 <br/>
 
