@@ -10,7 +10,7 @@ The name of the database folder is the date when the database was last updated i
 
 The database currently holds `22,514,712 Bitcoin addresses`. This is also the total number of Bitcoin addresses with a balance that exist in the blockchain.
 
-This can be verified by removing the hashtag on <a href=https://github.com/Isaacdelly/p/blob/master/plutus.py#L113>Line 113</a> before running the program. This will print the size of the database.
+This can be verified by removing the hashtag on <a href="https://github.com/Isaacdelly/Plutus/blob/master/plutus.py#L113">Line 113</a> before running the program. This will print the size of the database.
 
 ### Why Are There So Many Files?
 
