@@ -69,10 +69,4 @@ However, if a balance is found, then all necessary information about the wallet 
 
 # Recent Improvements & TODO
 
-- [X] Use a set to store the database
-
-- [ ] Improve terminal output
-
-<br/>
-
 <a href="https://github.com/Isaacdelly/Plutus/issues">Create an issue</a> so I can add more stuff to improve
