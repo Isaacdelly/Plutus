@@ -112,6 +112,5 @@ if __name__ == '__main__':
     # To verify the database size, remove the # from the line below
     #print('Database Size: ' + str(sum(len(i) for i in database))); quit()
     
-    with multiprocessing.Pool(multiprocessing.cpu_count()) as pool:
-            pool.map(main(database), range(multiprocessing.cpu_count() * 2))
-            
+    for cpu in range(multiprocessing.cpu_count()):
+        multiprocessing.Process(target=main, args=(database,)).start()
