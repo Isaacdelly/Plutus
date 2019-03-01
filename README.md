@@ -11,8 +11,6 @@ An automated Bitcoin wallet collider that brute forces random wallet addresses
 <a href="https://www.python.org/downloads/">Python 3.6</a> or higher
 
 Python modules listed in the <a href="/requirements.txt">requirements.txt<a/>
-  
-Approximately 3 GB of availiable RAM
 
 # Installation
 
