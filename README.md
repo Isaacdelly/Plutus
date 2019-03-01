@@ -44,7 +44,7 @@ The private keys are converted into their respective public keys using the `star
 
 A pre-calculated database of every Bitcoin address with a positive balance is included in this project. The generated address is searched within the database, and if it is found that the address has a balance, then the private key, public key and wallet address are saved to the text file `plutus.txt` on the user's hard drive.
 
-This program also utilizes multiprocessing through the `multiprocessing.Pool()` function in order to make concurrent calculations.
+This program also utilizes multiprocessing through the `multiprocessing.Process()` function in order to make concurrent calculations.
 
 # Efficiency
 
