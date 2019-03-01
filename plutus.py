@@ -3,6 +3,7 @@
 # https://github.com/Isaacdelly/Plutus
 
 import os
+import pickle
 import hashlib
 import binascii
 import multiprocessing
