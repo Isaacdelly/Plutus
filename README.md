@@ -56,7 +56,7 @@ Visit <a href="/database/">/database</a> for information
 
 # Expected Output
 
-Every time this program checks the balance of a generated address, it will print the result to the user. If an empty wallet is found, then the wallet address will be printed to the terminal. An example is:
+Every time this program checks the balance of a generated address, it will print the result to the user. If an empty wallet was generated, then the wallet address will be printed to the terminal. An example is:
 
 >1Kz2CTvjzkZ3p2BQb5x5DX6GEoHX2jFS45
 
