@@ -50,7 +50,7 @@ This program also utilizes multiprocessing through the `multiprocessing.Process(
 
 It takes `0.0032457721` seconds for this progam to brute force a __single__ Bitcoin address. 
 
-However, through `multiprocessing.Pool()` a concurrent process is created for every CPU your computer has. So this program can brute force addresses at a speed of `0.0032457721 ÷ cpu_count()` seconds.
+However, through `multiprocessing.Process()` a concurrent process is created for every CPU your computer has. So this program can brute force addresses at a speed of `0.0032457721 ÷ cpu_count()` seconds.
 
 # Database FAQ
 
