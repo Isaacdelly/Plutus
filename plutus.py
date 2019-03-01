@@ -93,7 +93,7 @@ def main(database):
     
 if __name__ == '__main__':
     """Deserialize the database and read into a list of sets for easier selection and O(1) complexity. Initialize
-    the multiprocessing pool to target the main function with cpu_count() concurrent processes.
+    the multiprocessing to target the main function with cpu_count() concurrent processes.
     """
     database = [set() for _ in range(4)]
     count = len(os.listdir(DATABASE))
