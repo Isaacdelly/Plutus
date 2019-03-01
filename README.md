@@ -19,13 +19,13 @@ Approximately 3 GB of availiable RAM
 ```
 $ git clone https://github.com/Isaacdelly/Plutus.git plutus
 
-$ cd plutus && pip install -r requirements.txt
+$ cd plutus && pip3 install -r requirements.txt
 ```
 
 # Quick Start
 
 ```
-$ python plutus.py
+$ python3 plutus.py
 ```
 
 # Proof Of Concept
