@@ -99,7 +99,7 @@ if __name__ == '__main__':
     count = len(os.listdir(DATABASE))
     half = count // 2; quarter = half // 2
     for c, p in enumerate(os.listdir(DATABASE)):
-        print('reading database: ' + str(c + 1) + '/' + str(count), end = '\r')
+        print('\rreading database: ' + str(c + 1) + '/' + str(count), end = ' ')
         with open(DATABASE + p, 'rb') as file:
             if c < half:
                 if c < quarter: database[0] = database[0] | pickle.load(file)
@@ -107,6 +107,7 @@ if __name__ == '__main__':
             else:
                 if c < half + quarter: database[2] = database[2] | pickle.load(file)
                 else: database[3] = database[3] | pickle.load(file)
+    print('DONE')
     
     # To verify the database size, remove the # from the line below
     #print('Database Size: ' + str(sum(len(i) for i in database))); quit()
