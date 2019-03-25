@@ -9,7 +9,7 @@ import binascii
 import multiprocessing
 from ellipticcurve.privateKey import PrivateKey
 
-DATABASE = r'database/FEB_03_2019/'
+DATABASE = r'database/MAR_23_2019/'
 
 def generate_private_key(): 
     """Generate a random 32-byte hex integer which serves as a randomly generated Bitcoin private key.
@@ -38,7 +38,7 @@ def public_key_to_address(public_key):
     while n > 0:
         n, remainder = divmod(n, 58)
         output.append(alphabet[remainder])
-    [(output.append(alphabet[0]), ) for i in range(count)]
+    for i in range(count): output.append(alphabet[0])
     return ''.join(output[::-1])
 
 def process(private_key, public_key, address, database):
@@ -67,7 +67,7 @@ def private_key_to_WIF(private_key):
     var = hashlib.sha256(binascii.unhexlify(hashlib.sha256(binascii.unhexlify('80' + private_key)).hexdigest())).hexdigest()
     var = binascii.unhexlify('80' + private_key + var[0:8])
     alphabet = chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-    result = ''; value = pad = 0;
+    value = pad = 0; result = ''
     for i, c in enumerate(var[::-1]): value += 256**i * c
     while value >= len(alphabet):
         div, mod = divmod(value, len(alphabet))
@@ -114,4 +114,4 @@ if __name__ == '__main__':
     
     for cpu in range(multiprocessing.cpu_count()):
         multiprocessing.Process(target = main, args = (database, )).start()
-    
+   
