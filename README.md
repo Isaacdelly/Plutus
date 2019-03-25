@@ -75,7 +75,7 @@ This program uses approximately 2GB of RAM per CPU. Becuase this program uses mu
 
 ![Imgur](https://i.imgur.com/9Cq0yf3.png)
 
-The memory consumption stack trace was made by using <a href="https://pypi.org/project/memory-profiler/">mprof</a> to monitor this program brute force 10,000 addresses on a 4 logical processor machine with 8GB of RAM. As a result, 4 child processes were created, each comsuming 2100MiB of RAM (~2GB).
+The memory consumption stack trace was made by using <a href="https://pypi.org/project/memory-profiler/">mprof</a> to monitor this program brute force 10,000 addresses on a 4 logical processor machine with 8GB of RAM. As a result, 4 child processes were created, each consuming 2100MiB of RAM (~2GB).
 
 # Recent Improvements & TODO
 
