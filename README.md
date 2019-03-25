@@ -79,4 +79,8 @@ The memory consumption stack trace was made by using <a href="https://pypi.org/p
 
 # Recent Improvements & TODO
 
+- [X] Added RAM requirements
+
+- [X] Database now only has P2PKH addresses. Addresses of other types have been removed
+
 <a href="https://github.com/Isaacdelly/Plutus/issues">Create an issue</a> so I can add more stuff to improve
