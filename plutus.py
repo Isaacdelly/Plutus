@@ -1,13 +1,14 @@
 # Plutus Bitcoin Brute Forcer
 # Made by Isaac Delly
 # https://github.com/Isaacdelly/Plutus
+# Added fastecdsa - June 2019 - Ian McMurray (working on making it faster)
 
 import os
 import pickle
 import hashlib
 import binascii
 import multiprocessing
-from ellipticcurve.privateKey import PrivateKey
+from fastecdsa import keys, curve
 
 DATABASE = r'database/MAR_23_2019/'
 
@@ -21,9 +22,12 @@ def private_key_to_public_key(private_key):
     """Accept a hex private key and convert it to its respective public key. Because converting a private key to 
     a public key requires SECP256k1 ECDSA signing, this function is the most time consuming and is a bottleneck
     in the overall speed of the program.
-    Average Time: 0.0031567731 seconds
+    Average Time: 0.0016401287 seconds
     """
-    return '04' + PrivateKey().fromString(bytes.fromhex(private_key)).publicKey().toString().hex().upper()
+    # get the public key corresponding to the private key we just generated
+    c = int('0x%s'%private_key,0)
+    d = keys.get_public_key(c, curve.secp256k1)
+    return '04%s%s'%('{0:x}'.format(int(d.x)), '{0:x}'.format(int(d.y)))
 
 def public_key_to_address(public_key):
     """Accept a public key and convert it to its resepective P2PKH wallet address.
@@ -31,15 +35,19 @@ def public_key_to_address(public_key):
     """
     output = []; alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
     var = hashlib.new('ripemd160')
-    var.update(hashlib.sha256(binascii.unhexlify(public_key.encode())).digest())
-    var = '00' + var.hexdigest() + hashlib.sha256(hashlib.sha256(binascii.unhexlify(('00' + var.hexdigest()).encode())).digest()).hexdigest()[0:8]
-    count = [char != '0' for char in var].index(True) // 2
-    n = int(var, 16)
-    while n > 0:
-        n, remainder = divmod(n, 58)
-        output.append(alphabet[remainder])
-    for i in range(count): output.append(alphabet[0])
-    return ''.join(output[::-1])
+    try:
+        var.update(hashlib.sha256(binascii.unhexlify(public_key.encode())).digest())
+        var = '00' + var.hexdigest() + hashlib.sha256(hashlib.sha256(binascii.unhexlify(('00' + var.hexdigest()).encode())).digest()).hexdigest()[0:8]
+        count = [char != '0' for char in var].index(True) // 2
+        n = int(var, 16)
+        while n > 0:
+            n, remainder = divmod(n, 58)
+            output.append(alphabet[remainder])
+        for i in range(count): output.append(alphabet[0])
+        return ''.join(output[::-1])
+    except:
+        # Skip if public_key gen caused an error - I think this happens because urandom was smaller than 32 bytes?
+        return -1
 
 def process(private_key, public_key, address, database):
     """Accept an address and query the database. If the address is found in the database, then it is assumed to have a 
@@ -57,7 +65,8 @@ def process(private_key, public_key, address, database):
                        'public key: ' + str(public_key) + '\n' +
                        'address: ' + str(address) + '\n\n')
     else: 
-         print(str(address))
+        # Is printing every address slowing the process down since it has to write to STDOUT?
+        print(str(address))
 
 def private_key_to_WIF(private_key):
     """Convert the hex private key into Wallet Import Format for easier wallet importing. This function is 
@@ -85,11 +94,12 @@ def main(database):
     """
     while True:
         private_key = generate_private_key()                # 0.0000061659 seconds
-        public_key = private_key_to_public_key(private_key) # 0.0031567731 seconds
+        public_key = private_key_to_public_key(private_key) # 0.0016401287 seconds
         address = public_key_to_address(public_key)         # 0.0000801390 seconds
-        process(private_key, public_key, address, database) # 0.0000026941 seconds
+        if address != -1:
+            process(private_key, public_key, address, database) # 0.0000026941 seconds
                                                             # --------------------
-                                                            # 0.0032457721 seconds
+                                                            # 0.0017291287 seconds
     
 if __name__ == '__main__':
     """Deserialize the database and read into a list of sets for easier selection and O(1) complexity. Initialize

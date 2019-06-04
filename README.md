@@ -1,6 +1,6 @@
-# Plutus Bitcoin Brute Forcer
+# Plutus Bitcoin Brute Forcer with Fastecdsa
 
-An automated Bitcoin wallet collider that brute forces random wallet addresses
+An automated Bitcoin wallet collider that brute forces random wallet addresses 50% faster!
 
 # Like This Project? Give It A Star
 
@@ -48,9 +48,9 @@ This program also utilizes multiprocessing through the `multiprocessing.Process(
 
 # Efficiency
 
-It takes `0.0032457721` seconds for this progam to brute force a __single__ Bitcoin address. 
+It takes `0.0017291287` ~~`0.0032457721`~~ seconds for this progam to brute force a __single__ Bitcoin address. 
 
-However, through `multiprocessing.Process()` a concurrent process is created for every CPU your computer has. So this program can brute force addresses at a speed of `0.0032457721 ÷ cpu_count()` seconds.
+However, through `multiprocessing.Process()` a concurrent process is created for every CPU your computer has. So this program can brute force addresses at a speed of `0.0017291287 ÷ cpu_count()` seconds.
 
 # Database FAQ
 
