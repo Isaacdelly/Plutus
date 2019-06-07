@@ -1,6 +1,7 @@
 # Plutus Bitcoin Brute Forcer with Fastecdsa
 
 An automated Bitcoin wallet collider that brute forces random wallet addresses 50% faster!
+Windows OS Users are encouraged to not use this repository due to GMP Lib installation issues.
 
 # Like This Project? Give It A Star
 
@@ -13,6 +14,10 @@ An automated Bitcoin wallet collider that brute forces random wallet addresses 5
 Python modules listed in the <a href="/requirements.txt">requirements.txt<a/>
   
 Minimum <a href="#memory-consumption">RAM requirements</a>
+
+GMP Lib. <a href="http://www.mathemagix.org/www/mmdoc/doc/html/external/gmp.en.html">See this link for more information</a>
+
+Debian/Ubuntu Users can install GMP with the following: `sudo apt-get install libgmp-dev`
 
 # Installation
 

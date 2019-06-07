@@ -66,6 +66,7 @@ def process(private_key, public_key, address, database):
                        'address: ' + str(address) + '\n\n')
     else: 
         # Is printing every address slowing the process down since it has to write to STDOUT?
+        #print(str(private_key),":",str(address))
         print(str(address))
 
 def private_key_to_WIF(private_key):
