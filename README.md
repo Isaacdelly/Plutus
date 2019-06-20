@@ -11,6 +11,7 @@ A Bitcoin wallet collider that brute forces random wallet addresses
 <a href="https://www.python.org/downloads/">Python 3.6</a> or higher
 
 Python modules listed in the <a href="/requirements.txt">requirements.txt<a/>
+  
 Minimum <a href="#memory-consumption">RAM requirements</a>
 
 # Installation
@@ -29,9 +30,9 @@ $ python3 plutus.py
 
 # Proof Of Concept
 
-Bitcoin private keys allow a person to control the wallet that it correlates to. If the wallet has Bitcoins in it, then the private key will allow the person to spend whatever balance the wallet has.
+Bitcoin private keys allow a person to control the wallet that it correlates to. If a wallet has Bitcoins in it, then the private key will allow a person to spend whatever balance the wallet has.
 
-This program is essentially a brute forcing algorithm. It continuously generates random Bitcoin private keys, converts the private keys into their respective wallet addresses, then checks the balance of the addresses. The ultimate goal is to randomly find a wallet with a balance out of the 2<sup>160</sup> possible wallets in existence. In the event that a balance is found, the wallet's private key, public key and wallet address are stored in the text file `plutus.txt` on the user's hard drive.
+This program is essentially a brute forcing algorithm. It continuously generates random Bitcoin private keys, converts the private keys into their respective wallet addresses, then checks the balance of the addresses. The ultimate goal is to randomly find a wallet with a balance out of the 2<sup>160</sup> possible wallets in existence. 
 
 # How It Works
 
