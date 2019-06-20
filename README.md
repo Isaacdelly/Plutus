@@ -54,7 +54,7 @@ However, through `multiprocessing.Process()` a concurrent process is created for
 
 # Database FAQ
 
-Visit <a href="/database/">/database</a> for information
+An offline database is used to find the balance of generated Bitcoin addresses. Visit <a href="/database/">/database</a> for information
 
 # Expected Output
 
