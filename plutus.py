@@ -12,7 +12,7 @@ from ellipticcurve.privateKey import PrivateKey
 DATABASE = r'database/MAR_23_2019/'
 
 def generate_private_key(): 
-	"""
+    	"""
 	Generate a random 32-byte hex integer which serves as a randomly 
 	generated Bitcoin private key.
 	Average Time: 0.0000061659 seconds
@@ -61,13 +61,13 @@ def process(private_key, public_key, address, database):
 	"""
 	if address in database[0] or \
 	   address in database[1] or \
-       address in database[2] or \
+	   address in database[2] or \
 	   address in database[3]:
 		with open('plutus.txt', 'a') as file:
 			file.write('hex private key: ' + str(private_key) + '\n' +
-					   'WIF private key: ' + str(private_key_to_WIF(private_key)) + '\n' +
-					   'public key: ' + str(public_key) + '\n' +
-					   'address: ' + str(address) + '\n\n')
+				   'WIF private key: ' + str(private_key_to_WIF(private_key)) + '\n' +
+			      	   'public key: ' + str(public_key) + '\n' +
+			           'address: ' + str(address) + '\n\n')
 	else: 
 		print(str(address))
 
@@ -102,12 +102,12 @@ def main(database):
 	one process.
 	"""
 	while True:
-		private_key = generate_private_key()				# 0.0000061659 seconds
-		public_key = private_key_to_public_key(private_key) # 0.0031567731 seconds
-		address = public_key_to_address(public_key)			# 0.0000801390 seconds
-		process(private_key, public_key, address, database) # 0.0000026941 seconds
-															# --------------------
-															# 0.0032457721 seconds
+		private_key = generate_private_key()			# 0.0000061659 seconds
+		public_key = private_key_to_public_key(private_key) 	# 0.0031567731 seconds
+		address = public_key_to_address(public_key)		# 0.0000801390 seconds
+		process(private_key, public_key, address, database) 	# 0.0000026941 seconds
+									# --------------------
+									# 0.0032457721 seconds
 
 if __name__ == '__main__':
 	"""
@@ -135,3 +135,4 @@ if __name__ == '__main__':
 
 	for cpu in range(multiprocessing.cpu_count()):
 		multiprocessing.Process(target = main, args = (database, )).start()
+
