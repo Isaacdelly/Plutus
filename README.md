@@ -1,6 +1,6 @@
 # Plutus Bitcoin Brute Forcer
 
-An automated Bitcoin wallet collider that brute forces random wallet addresses
+A Bitcoin wallet collider that brute forces random wallet addresses
 
 # Like This Project? Give It A Star
 
@@ -11,7 +11,6 @@ An automated Bitcoin wallet collider that brute forces random wallet addresses
 <a href="https://www.python.org/downloads/">Python 3.6</a> or higher
 
 Python modules listed in the <a href="/requirements.txt">requirements.txt<a/>
-  
 Minimum <a href="#memory-consumption">RAM requirements</a>
 
 # Installation
@@ -30,11 +29,9 @@ $ python3 plutus.py
 
 # Proof Of Concept
 
-Bitcoin private keys allow a person to control the wallet that it correlates to. If the wallet has Bitcoins in it, then the private key will allow the person to spend whatever balance the wallet has. 
+Bitcoin private keys allow a person to control the wallet that it correlates to. If the wallet has Bitcoins in it, then the private key will allow the person to spend whatever balance the wallet has.
 
-This program attempts to brute force Bitcoin private keys in an attempt to successfully find a correlating wallet with a positive balance. In the event that a balance is found, the wallet's private key, public key and wallet address are stored in the text file `plutus.txt` on the user's hard drive.
-
-This program is essentially a brute forcing algorithm. It continuously generates random Bitcoin private keys, converts the private keys into their respective wallet addresses, then checks the balance of the addresses. The ultimate goal is to randomly find a wallet with a balance out of the 2<sup>160</sup> possible wallets in existence.
+This program is essentially a brute forcing algorithm. It continuously generates random Bitcoin private keys, converts the private keys into their respective wallet addresses, then checks the balance of the addresses. The ultimate goal is to randomly find a wallet with a balance out of the 2<sup>160</sup> possible wallets in existence. In the event that a balance is found, the wallet's private key, public key and wallet address are stored in the text file `plutus.txt` on the user's hard drive.
 
 # How It Works
 
@@ -58,11 +55,11 @@ Visit <a href="/database/">/database</a> for information
 
 # Expected Output
 
-Every time this program checks the balance of a generated address, it will print the result to the user. If an empty wallet was generated, then the wallet address will be printed to the terminal. An example is:
+Every time this program checks the balance of a generated address, it will print the result to the user. If an empty wallet is found, then the wallet address will be printed to the terminal. An example is:
 
 >1Kz2CTvjzkZ3p2BQb5x5DX6GEoHX2jFS45
 
-However, if a balance is found, then all necessary information about the wallet will be saved to the text file `plutus.txt`. An example is:
+However, if a wallet with a balance is found, then all necessary information about the wallet will be saved to the text file `plutus.txt`. An example is:
 
 >hex private key: 5A4F3F1CAB44848B2C2C515AE74E9CC487A9982C9DD695810230EA48B1DCEADD<br/>
 >WIF private key: 5JW4RCAXDbocFLK9bxqw5cbQwuSn86fpbmz2HhT9nvKMTh68hjm<br/>
@@ -71,7 +68,7 @@ However, if a balance is found, then all necessary information about the wallet 
 
 # Memory Consumption
 
-This program uses approximately 2GB of RAM per CPU. Becuase this program uses multiprocessing, some data gets shared between threads, making it difficult to accurately measure RAM usage. But the stack trace below is as precise as I could get it:
+This program uses approximately 2GB of RAM per CPU. Because this program uses multiprocessing, some data gets shared between threads making it difficult to accurately measure RAM usage.
 
 ![Imgur](https://i.imgur.com/9Cq0yf3.png)
 
@@ -79,8 +76,8 @@ The memory consumption stack trace was made by using <a href="https://pypi.org/p
 
 # Recent Improvements & TODO
 
-- [X] Added RAM requirements
+- [X] Fixed typos/formatting
 
-- [X] Database now only has P2PKH addresses. Addresses of other types have been removed
+- [ ] Updated database
 
 <a href="https://github.com/Isaacdelly/Plutus/issues">Create an issue</a> so I can add more stuff to improve
