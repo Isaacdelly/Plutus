@@ -12,7 +12,7 @@ from ellipticcurve.privateKey import PrivateKey
 DATABASE = r'database/MAR_23_2019/'
 
 def generate_private_key(): 
-    	"""
+	"""
 	Generate a random 32-byte hex integer which serves as a randomly 
 	generated Bitcoin private key.
 	Average Time: 0.0000061659 seconds
