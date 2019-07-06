@@ -8,7 +8,7 @@ The name of the database folder is the date when the database was last updated i
 
 ### How Many Addresses Does The Database Have?
 
-The database currently holds `19,216,420 Bitcoin addresses`. This is the total number of P2PKH Bitcoin addresses with a balance that exist in the blockchain.
+The database currently holds `20,720,668 Bitcoin addresses`. This is the total number of P2PKH Bitcoin addresses with a balance that exist in the blockchain.
 
 This can be verified by removing the hashtag on <a href="https://github.com/Isaacdelly/Plutus/blob/master/plutus.py#L134">Line 134</a> before running the program. This will print the size of the database.
 

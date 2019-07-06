@@ -71,7 +71,8 @@ def process(private_key, public_key, address, database):
     if address in database[0] or \
         address in database[1] or \
         address in database[2] or \
-        address in database[3]:
+        address in database[3] or \
+        address in database[4]:
         with open('plutus.txt', 'a') as file:
             file.write('hex private key: ' + str(private_key) + '\n' +
                     'WIF private key: ' + str(private_key_to_WIF(private_key)) + '\n' +
@@ -133,9 +134,9 @@ if __name__ == '__main__':
     for c, p in enumerate(os.listdir(DATABASE)):
         print('\rreading database: ' + str(c + 1) + '/' + str(count), end = ' ')
         with open(DATABASE + p, 'rb') as file:
-            if c + 1 == 21:
-                database[4] = database[4] | pickle.load(file)
-                continue
+            if c + 1 == 21: # FIXME
+                database[4] = database[4] | pickle.load(file) # FIXME
+                continue # FIXME
             if c < half:
                 if c < quarter: database[0] = database[0] | pickle.load(file)
                 else: database[1] = database[1] | pickle.load(file)
