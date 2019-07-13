@@ -61,37 +61,12 @@ def process(private_key, public_key, address, database):
         address in database[2] or \
         address in database[3] or \
         address in database[4]:
-        with open('plutus.txt', 'a') as file:
-            file.write('hex private key: ' + str(private_key) + '\n' +
-                    'WIF private key: ' + str(private_key_to_WIF(private_key)) + '\n' +
-                    'public key: ' + str(public_key) + '\n' +
-                    'address: ' + str(address) + '\n\n')
+        with open('plutus.csv', 'a') as file:
+            file.write(str(private_key) + '\tn' + str(address) + '\n')
     else: 
         # Is printing every address slowing the process down since it has to write to STDOUT?
         #print(str(private_key),":",str(address))
         print('\r' + str(address), end = "")
-
-def private_key_to_WIF(private_key):
-    """
-    Convert the hex private key into Wallet Import Format for easier wallet 
-    importing. This function is only called if a wallet with a balance is 
-    found. Because that event is rare, this function is not significant to the 
-    main pipeline of the program and is not timed.
-    """
-    var = hashlib.sha256(binascii.unhexlify(hashlib.sha256(binascii.unhexlify('80' + private_key)).hexdigest())).hexdigest()
-    var = binascii.unhexlify('80' + private_key + var[0:8])
-    alphabet = chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-    value = pad = 0
-    result = ''
-    for i, c in enumerate(var[::-1]): value += 256**i * c
-    while value >= len(alphabet):
-        div, mod = divmod(value, len(alphabet))
-        result, value = chars[mod] + result, div
-    result = chars[value] + result
-    for c in var:
-        if c == 0: pad += 1
-        else: break
-    return chars[0] * pad + result
 
 def main(database):
     """
