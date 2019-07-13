@@ -40,25 +40,13 @@ def private_key_to_public_key(private_key):
 
 def public_key_to_address(public_key):
     """
-    Accept a public key and convert it to its resepective P2PKH wallet address.
+    Accept a public key and convert it to its resepective P2PKH wallet RipeMD-160 address.
     Average Time: 0.0000801390 seconds
     """
-    output = []
-    alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
     var = hashlib.new('ripemd160')
-    try:
-        var.update(hashlib.sha256(binascii.unhexlify(public_key.encode())).digest())
-        var = '00' + var.hexdigest() + hashlib.sha256(hashlib.sha256(binascii.unhexlify(('00' + var.hexdigest()).encode())).digest()).hexdigest()[0:8]
-        count = [char != '0' for char in var].index(True) // 2
-        n = int(var, 16)
-        while n > 0:
-            n, remainder = divmod(n, 58)
-            output.append(alphabet[remainder])
-        for i in range(count): output.append(alphabet[0])
-        return ''.join(output[::-1])
-    except:
-        # Skip if public_key gen caused an error - I think this happens because urandom was smaller than 32 bytes?
-        return -1
+	encoding = binascii.unhexlify(public_key.encode())
+	var.update(hashlib.sha256(encoding).digest())
+	return var.hexdigest()
 
 def process(private_key, public_key, address, database):
     """
