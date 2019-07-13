@@ -1,6 +1,6 @@
-# Plutus Bitcoin Brute Forcer
+# Plutus Bitcoin and altcoins Brute Forcer
 
-A Bitcoin wallet collider that brute forces random wallet addresses
+A Bitcoin and altcoins wallet collider that brute forces random wallet RipeMD-160	addresses
 
 # Like This Project? Give It A Star
 
@@ -30,9 +30,9 @@ $ python3 plutus.py
 
 # Proof Of Concept
 
-A private key is a secret number that allows Bitcoins to be spent. If a wallet has Bitcoins in it, then the private key will allow a person to control the wallet and spend whatever balance the wallet has. So this program attempts to find Bitcoin private keys that correlate to wallets with positive balances. However, because it is impossible to know which private keys control wallets with money and which private keys control empty wallets, we have to randomly look at every possible private key that exists and hope to find one that has a balance.
+A private key is a secret number that allows Bitcoins and altcoin to be spent. If a wallet has Bitcoins or altcoin in it, then the private key will allow a person to control the wallet and spend whatever balance the wallet has. So this program attempts to find private keys that correlate to wallets with positive balances. However, because it is impossible to know which private keys control wallets with money and which private keys control empty wallets, we have to randomly look at every possible private key that exists and hope to find one that has a balance.
 
-This program is essentially a brute forcing algorithm. It continuously generates random Bitcoin private keys, converts the private keys into their respective wallet addresses, then checks the balance of the addresses. If a wallet with a balance is found, then the private key, public key and wallet address are saved to the text file `plutus.txt` on the user's hard drive. The ultimate goal is to randomly find a wallet with a balance out of the 2<sup>160</sup> possible wallets in existence. 
+This program is essentially a brute forcing algorithm. It continuously generates random private keys, converts the private keys into their respective ripemd160 addresses, then checks the balance of the addresses. If a wallet with a balance is found, then the private key, public key and wallet address are saved to the text file `plutus.txt` on the user's hard drive. The ultimate goal is to randomly find a wallet with a balance out of the 2<sup>160</sup> possible wallets in existence. 
 
 # How It Works
 
@@ -46,7 +46,7 @@ This program also utilizes multiprocessing through the `multiprocessing.Process(
 
 # Efficiency
 
-It takes `0.0032457721` seconds for this progam to brute force a __single__ Bitcoin address. 
+It takes `0.0032457721` seconds for this progam to brute force a __single__  address. 
 
 However, through `multiprocessing.Process()` a concurrent process is created for every CPU your computer has. So this program can brute force addresses at a speed of `0.0032457721 ÷ cpu_count()` seconds.
 
@@ -58,14 +58,11 @@ An offline database is used to find the balance of generated Bitcoin addresses. 
 
 Every time this program checks the balance of a generated address, it will print the result to the user. If an empty wallet is found, then the wallet address will be printed to the terminal. An example is:
 
->1Kz2CTvjzkZ3p2BQb5x5DX6GEoHX2jFS45
+>91b24bf9f5288532960ac687abb035127b1d28a5
 
-However, if a wallet with a balance is found, then all necessary information about the wallet will be saved to the text file `plutus.txt`. An example is:
+However, if a wallet with a balance is found, then all necessary information about the wallet will be saved to the text file `plutus.csv`. An example is:
 
->hex private key: 5A4F3F1CAB44848B2C2C515AE74E9CC487A9982C9DD695810230EA48B1DCEADD<br/>
->WIF private key: 5JW4RCAXDbocFLK9bxqw5cbQwuSn86fpbmz2HhT9nvKMTh68hjm<br/>
->public key: 04393B30BC950F358326062FF28D194A5B28751C1FF2562C02CA4DFB2A864DE63280CC140D0D540EA1A5711D1E519C842684F42445C41CB501B7EA00361699C320<br/>
->address: 1Kz2CTvjzkZ3p2BQb5x5DX6GEoHX2jFS45<br/>
+>1 91b24bf9f5288532960ac687abb035127b1d28a5
 
 # Memory Consumption
 
