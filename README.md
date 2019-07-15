@@ -4,7 +4,7 @@ A Bitcoin and altcoins wallet collider that brute forces random wallet RipeMD-16
 
 # Like This Project? Give It A Star
 
-[![](https://img.shields.io/github/stars/Isaacdelly/Plutus.svg)](https://github.com/Isaacdelly/Plutus)
+[![](https://img.shields.io/github/stars/Isaacdelly/Plutus.svg)](https://github.com/Jiloumed/Plutus)
 
 # Dependencies
 
@@ -17,7 +17,7 @@ Minimum <a href="#memory-consumption">RAM requirements</a>
 # Installation
 
 ```
-$ git clone https://github.com/Isaacdelly/Plutus.git plutus
+$ git clone https://github.com/Jiloumed/Plutus.git plutus
 
 $ cd plutus && pip3 install -r requirements.txt
 ```
