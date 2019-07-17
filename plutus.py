@@ -22,10 +22,10 @@ DATABASE = r'database/JUL_13_2019/'
 
 """
 Start from a random seed
-generated Bitcoin private key.
+then generat Bitcoin private keys from x coords.
 Average Time: 0.0000000000 seconds
 """
-seed =  0xdeedbeef
+seed =  0xdeadbeef
 
 modp = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F
 r = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
@@ -109,7 +109,7 @@ def private_key_to_public_key(private_key):
     publicKey = from_jacobian(publicKey[0], publicKey[1], publicKey[2])
     xpublicKey = "%064x" % publicKey[0]
     global seed
-    seed = publicKey[0]
+    seed = publicKey[0] #update next seed
     if publicKey[1] % 2 == 1: # If the Y value for the Public Key is odd.
         return "03" + xpublicKey.upper()
     else: # Or else, if the Y value is even.
