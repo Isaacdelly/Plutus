@@ -9,8 +9,6 @@ A Bitcoin and altcoins wallet collider that brute forces random wallet RipeMD-16
 # Dependencies
 
 <a href="https://www.python.org/downloads/">Python 3.6</a> or higher
-
-Python modules listed in the <a href="/requirements.txt">requirements.txt<a/>
   
 Minimum <a href="#memory-consumption">RAM requirements</a>
 
@@ -19,7 +17,6 @@ Minimum <a href="#memory-consumption">RAM requirements</a>
 ```
 $ git clone https://github.com/Jiloumed/Plutus.git plutus
 
-$ cd plutus && pip3 install -r requirements.txt
 ```
 
 # Quick Start
