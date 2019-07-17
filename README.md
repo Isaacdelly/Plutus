@@ -79,6 +79,8 @@ The memory consumption stack trace was made by using <a href="https://pypi.org/p
 
 - [X] Fixed typos/formatting
 
-- [ ] Updated database
+- [ ] Update database
+
+- [ ] Pickle loader
 
 <a href="https://github.com/Isaacdelly/Plutus/issues">Create an issue</a> so I can add more stuff to improve
