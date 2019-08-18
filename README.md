@@ -83,4 +83,6 @@ The memory consumption stack trace was made by using <a href="https://pypi.org/p
 
 - [ ] Pickle loader
 
+- [ ] Try to fix Memory Error
+
 <a href="https://github.com/Isaacdelly/Plutus/issues">Create an issue</a> so I can add more stuff to improve
