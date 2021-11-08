@@ -1,1 +1,1 @@
-starkbank-ecdsa==0.1.4
+starkbank-ecdsa==2.0.1
