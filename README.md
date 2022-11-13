@@ -8,16 +8,11 @@ A Bitcoin wallet collider that brute forces random wallet addresses
 
 # Dependencies
 
-A Linux operating system
-
 <a href="https://www.python.org/downloads/">Python 3.6</a> or higher
 
-libgmp3-dev Linux installation. Install by running the command:
-```
-sudo apt-get install libgmp3-dev
-```
-
 Python modules listed in the <a href="/requirements.txt">requirements.txt<a/>
+  
+Minimum <a href="#memory-consumption">RAM requirements</a>
 
 # Installation
 
@@ -41,9 +36,11 @@ This program is essentially a brute forcing algorithm. It continuously generates
 
 # How It Works
 
-Private and public key pairs are generated though the `fastecdsa` python library. This is the fastest library to perform secp256k1 signing. The public keys are converted into their Bitcoin wallet addresses using the binascii and hashlib standard libraries.
+Private keys are generated randomly to create a 32 byte hexidecimal string using the cryptographically secure `os.urandom()` function.
 
-A pre-calculated database of every P2PKH funded Bitcoin address is included in this project. The generated address is searched within the database, and if it is found that the address has a balance, then the private key, public key and wallet address are saved to the text file `plutus.txt` on the user's hard drive.
+The private keys are converted into their respective public keys using the `starkbank-ecdsa` Python module. Then the public keys are converted into their Bitcoin wallet addresses using the `binascii` and `hashlib` standard libraries.
+
+A pre-calculated database of every P2PKH Bitcoin address with a positive balance is included in this project. The generated address is searched within the database, and if it is found that the address has a balance, then the private key, public key and wallet address are saved to the text file `plutus.txt` on the user's hard drive.
 
 This program also utilizes multiprocessing through the `multiprocessing.Process()` function in order to make concurrent calculations.
 
@@ -70,6 +67,22 @@ However, if a wallet with a balance is found, then all necessary information abo
 >public key: 04393B30BC950F358326062FF28D194A5B28751C1FF2562C02CA4DFB2A864DE63280CC140D0D540EA1A5711D1E519C842684F42445C41CB501B7EA00361699C320<br/>
 >address: 1Kz2CTvjzkZ3p2BQb5x5DX6GEoHX2jFS45<br/>
 
+# Memory Consumption
+
+This program uses approximately 2GB of RAM per CPU. Because this program uses multiprocessing, some data gets shared between threads making it difficult to accurately measure RAM usage.
+
+![Imgur](https://i.imgur.com/9Cq0yf3.png)
+
+The memory consumption stack trace was made by using <a href="https://pypi.org/project/memory-profiler/">mprof</a> to monitor this program brute force 10,000 addresses on a 4 logical processor machine with 8GB of RAM. As a result, 4 child processes were created, each consuming 2100MiB of RAM (~2GB).
+
 # Recent Improvements & TODO
+
+- [X] Fixed typos/formatting
+
+- [ ] Update database
+
+- [ ] Pickle loader
+
+- [ ] Try to fix Memory Error
 
 <a href="https://github.com/Isaacdelly/Plutus/issues">Create an issue</a> so I can add more stuff to improve
