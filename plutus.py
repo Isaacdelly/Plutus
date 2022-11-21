@@ -125,10 +125,10 @@ if __name__ == '__main__':
                     sys.exit(-1)
             case 'substring':
                 substring = arg.split['='][1]
-                if substring > 0 and substring < 35:
+                if substring > 0 and substring < 27:
                     args['substring'] = substring
                 else:
-                    print('invalid input. substring must be greater than 0 and less than 35')
+                    print('invalid input. substring must be greater than 0 and less than 27')
                     sys.exit(-1)
     
     print('reading database files...')
