@@ -21,7 +21,8 @@ sudo apt-get install libgmp3-dev
 
 ```
 git clone https://github.com/Isaacdelly/Plutus.git plutus
-
+```
+```
 cd plutus && pip3 install -r requirements.txt
 ```
 
