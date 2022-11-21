@@ -43,21 +43,21 @@ def public_key_to_address(public_key):
     return ''.join(output[::-1])
 
 def private_key_to_wif(private_key):
-	digest = hashlib.sha256(binascii.unhexlify('80' + private_key)).hexdigest()
-	var = hashlib.sha256(binascii.unhexlify(digest)).hexdigest()
-	var = binascii.unhexlify('80' + private_key + var[0:8])
-	alphabet = chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-	value = pad = 0
-	result = ''
-	for i, c in enumerate(var[::-1]): value += 256**i * c
-	while value >= len(alphabet):
-		div, mod = divmod(value, len(alphabet))
-		result, value = chars[mod] + result, div
-	result = chars[value] + result
-	for c in var:
-		if c == 0: pad += 1
-		else: break
-	return chars[0] * pad + result
+    digest = hashlib.sha256(binascii.unhexlify('80' + private_key)).hexdigest()
+    var = hashlib.sha256(binascii.unhexlify(digest)).hexdigest()
+    var = binascii.unhexlify('80' + private_key + var[0:8])
+    alphabet = chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+    value = pad = 0
+    result = ''
+    for i, c in enumerate(var[::-1]): value += 256**i * c
+    while value >= len(alphabet):
+        div, mod = divmod(value, len(alphabet))
+        result, value = chars[mod] + result, div
+    result = chars[value] + result
+    for c in var:
+        if c == 0: pad += 1
+        else: break
+    return chars[0] * pad + result
 
 def main(database, args):
     while True:
@@ -119,16 +119,16 @@ if __name__ == '__main__':
             case 'verbose':
                 verbose = arg.split('=')[1]
                 if verbose in ['0', '1']:
-                    args['verbose'] = arg.split('=')[1]
+                    args['verbose'] = verbose
                 else:
                     print('invalid input. verbose must be 0(false) or 1(true)')
                     sys.exit(-1)
             case 'substring':
                 substring = arg.split['='][1]
-                if substring > 0 and substring < 27:
+                if substring > 0 and substring < 35:
                     args['substring'] = substring
                 else:
-                    print('invalid input. substring must be greater than 0 and less than 27')
+                    print('invalid input. substring must be greater than 0 and less than 35')
                     sys.exit(-1)
     
     print('reading database files...')
