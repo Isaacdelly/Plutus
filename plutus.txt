@@ -1,2 +1,1 @@
 If you find a Bitcoin wallet with a balance, the wallet details will show up here:
-

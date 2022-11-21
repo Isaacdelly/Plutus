@@ -2,82 +2,47 @@
 # Made by Isaac Delly
 # https://github.com/Isaacdelly/Plutus
 
-import os
-import pickle
+from fastecdsa import keys, curve
+from ellipticcurve.privateKey import PrivateKey
+import platform
+import multiprocessing
 import hashlib
 import binascii
-import multiprocessing
-from ellipticcurve.privateKey import PrivateKey
+import os
+import sys
+import time
 
-DATABASE = r'database/MAR_23_2019/'
+DATABASE = r'database/11_13_2022/'
 
-def generate_private_key(): 
-	"""
-	Generate a random 32-byte hex integer which serves as a randomly 
-	generated Bitcoin private key.
-	Average Time: 0.0000061659 seconds
-	"""
-	return binascii.hexlify(os.urandom(32)).decode('utf-8').upper()
+def generate_private_key():
+    return binascii.hexlify(os.urandom(32)).decode('utf-8').upper()
 
-def private_key_to_public_key(private_key):
-	"""
-	Accept a hex private key and convert it to its respective public key. 
-	Because converting a private key to a public key requires SECP256k1 ECDSA 
-	signing, this function is the most time consuming and is a bottleneck in 
-	the overall speed of the program.
-	Average Time: 0.0031567731 seconds
-	"""
-	pk = PrivateKey().fromString(bytes.fromhex(private_key))
-	return '04' + pk.publicKey().toString().hex().upper()
+def private_key_to_public_key(private_key, fastecdsa):
+    if fastecdsa:
+        key = keys.get_public_key(int('0x' + private_key, 0), curve.secp256k1)
+        return '04' + (hex(key.x)[2:] + hex(key.y)[2:]).zfill(128)
+    else:
+        pk = PrivateKey().fromString(bytes.fromhex(private_key))
+        return '04' + pk.publicKey().toString().hex().upper()
 
 def public_key_to_address(public_key):
-	"""
-	Accept a public key and convert it to its resepective P2PKH wallet address.
-	Average Time: 0.0000801390 seconds
-	"""
-	output = []
-	alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-	var = hashlib.new('ripemd160')
-	encoding = binascii.unhexlify(public_key.encode())
-	var.update(hashlib.sha256(encoding).digest())
-	var_encoded = ('00' + var.hexdigest()).encode()
-	digest = hashlib.sha256(binascii.unhexlify(var_encoded)).digest()
-	var_hex = '00' + var.hexdigest() + hashlib.sha256(digest).hexdigest()[0:8]
-	count = [char != '0' for char in var_hex].index(True) // 2
-	n = int(var_hex, 16)
-	while n > 0:
-		n, remainder = divmod(n, 58)
-		output.append(alphabet[remainder])
-	for i in range(count): output.append(alphabet[0])
-	return ''.join(output[::-1])
+    output = []
+    alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+    var = hashlib.new('ripemd160')
+    encoding = binascii.unhexlify(public_key.encode())
+    var.update(hashlib.sha256(encoding).digest())
+    var_encoded = ('00' + var.hexdigest()).encode()
+    digest = hashlib.sha256(binascii.unhexlify(var_encoded)).digest()
+    var_hex = '00' + var.hexdigest() + hashlib.sha256(digest).hexdigest()[0:8]
+    count = [char != '0' for char in var_hex].index(True) // 2
+    n = int(var_hex, 16)
+    while n > 0:
+        n, remainder = divmod(n, 58)
+        output.append(alphabet[remainder])
+    for i in range(count): output.append(alphabet[0])
+    return ''.join(output[::-1])
 
-def process(private_key, public_key, address, database):
-	"""
-	Accept an address and query the database. If the address is found in the 
-	database, then it is assumed to have a balance and the wallet data is 
-	written to the hard drive. If the address is not in the database, then it 
-	is assumed to be empty and printed to the user.
-	Average Time: 0.0000026941 seconds
-	"""
-	if address in database[0] or \
-	   address in database[1] or \
-	   address in database[2] or \
-	   address in database[3]:
-		with open('plutus.txt', 'a') as file:
-			file.write('hex private key: ' + str(private_key) + '\n' +
-				   'WIF private key: ' + str(private_key_to_WIF(private_key)) + '\n' +
-			      	   'public key: ' + str(public_key) + '\n' +
-			           'address: ' + str(address) + '\n\n')
-	else: 
-		print(str(address))
-
-def private_key_to_WIF(private_key):
-	"""
-	Convert the hex private key into Wallet Import Format for easier wallet 
-	importing. This function is only called if a wallet with a balance is 
-	found. Because that event is rare, this function is not significant to the 
-	main pipeline of the program and is not timed.
-	"""
+def private_key_to_wif(private_key):
 	digest = hashlib.sha256(binascii.unhexlify('80' + private_key)).hexdigest()
 	var = hashlib.sha256(binascii.unhexlify(digest)).hexdigest()
 	var = binascii.unhexlify('80' + private_key + var[0:8])
@@ -94,45 +59,89 @@ def private_key_to_WIF(private_key):
 		else: break
 	return chars[0] * pad + result
 
-def main(database):
-	"""
-	Create the main pipeline by using an infinite loop to repeatedly call the 
-	functions, while utilizing multiprocessing from __main__. Because all the 
-	functions are relatively fast, it is better to combine them all into 
-	one process.
-	"""
-	while True:
-		private_key = generate_private_key()			# 0.0000061659 seconds
-		public_key = private_key_to_public_key(private_key) 	# 0.0031567731 seconds
-		address = public_key_to_address(public_key)		# 0.0000801390 seconds
-		process(private_key, public_key, address, database) 	# 0.0000026941 seconds
-									# --------------------
-									# 0.0032457721 seconds
+def main(database, args):
+    while True:
+        private_key = generate_private_key()
+        public_key = private_key_to_public_key(private_key, args['fastecdsa']) 
+        address = public_key_to_address(public_key)
+
+        if args['verbose']:
+            print(address)
+
+        if address[-args['substring']:] in database:
+            with open('plutus.txt', 'a') as file:
+                file.write('hex private key: ' + str(private_key) + '\n' +
+                           'WIF private key: ' + str(private_key_to_wif(private_key)) + '\n'
+                           'public key: ' + str(public_key) + '\n' +
+                           'uncompressed address: ' + str(address) + '\n\n')
+
+def print_help():
+    print('''Plutus homepage: https://github.com/Isaacdelly/Plutus
+Plutus QA support: https://github.com/Isaacdelly/Plutus/issues
+
+
+Speed test: 
+execute 'python3 plutus.py time', the output will be the time it takes to bruteforce a single address in seconds
+
+
+By default this program runs with parameters:
+python3 plutus.py verbose=0 substring=8
+
+verbose: must be 0 or 1. If 1, then every bitcoin address that gets bruteforced will be printed to the terminal. This has the potential to slow the program down. An input of 0 will not print anything to the terminal and the bruteforcing will work silently. By default verbose is 0.
+
+substring: to make the program memory efficient, the entire bitcoin address is not loaded from the database. Only the last <substring> characters are loaded. This significantly reduces the amount of RAM required to run the program. if you still get memory errors then try making this number smaller, by default it is set to 8. This opens us up to getting false positives (empty addresses mistaken as funded) with a probability of 1/(16^<substring>), however it does NOT leave us vulnerable to false negatives (funded addresses being mistaken as empty) so this is an acceptable compromise.''')
+    sys.exit(0)
+
+def timer(args):
+    start = time.time()
+    private_key = generate_private_key()
+    public_key = private_key_to_public_key(private_key, args['fastecdsa'])
+    address = public_key_to_address(public_key)
+    end = time.time()
+    print(str(end - start))
+    sys.exit(0)
 
 if __name__ == '__main__':
-	"""
-	Deserialize the database and read into a list of sets for easier selection 
-	and O(1) complexity. Initialize the multiprocessing to target the main 
-	function with cpu_count() concurrent processes.
-	"""
-	database = [set() for _ in range(4)]
-	count = len(os.listdir(DATABASE))
-	half = count // 2
-	quarter = half // 2
-	for c, p in enumerate(os.listdir(DATABASE)):
-		print('\rreading database: ' + str(c + 1) + '/' + str(count), end = ' ')
-		with open(DATABASE + p, 'rb') as file:
-			if c < half:
-				if c < quarter: database[0] = database[0] | pickle.load(file)
-				else: database[1] = database[1] | pickle.load(file)
-			else:
-				if c < half + quarter: database[2] = database[2] | pickle.load(file)
-				else: database[3] = database[3] | pickle.load(file)
-	print('DONE')
+    args = {
+        'verbose': 0,
+        'substring': 8,
+        'fastecdsa': False
+    }
+    if platform.system() in ['Linux', 'Darwin']:
+        args['fastecdsa'] = True
+    
+    for arg in sys.argv[1:]:
+        match arg.split('=')[0]:
+            case 'help':
+                print_help()
+            case 'time':
+                timer(args)
+            case 'verbose':
+                verbose = arg.split('=')[1]
+                if verbose in ['0', '1']:
+                    args['verbose'] = arg.split('=')[1]
+                else:
+                    print('invalid input. verbose must be 0(false) or 1(true)')
+                    sys.exit(-1)
+            case 'substring':
+                substring = arg.split['='][1]
+                if substring > 0 and substring < 35:
+                    args['substring'] = substring
+                else:
+                    print('invalid input. substring must be greater than 0 and less than 35')
+                    sys.exit(-1)
+    
+    print('reading database files...')
+    database = set()
+    for filename in os.listdir(DATABASE):
+        with open(DATABASE + filename) as file:
+            for address in file:
+                address = address.strip()
+                database.add(address[-args['substring']:])
+    print('DONE')
 
-	# To verify the database size, remove the # from the line below
-	#print('database size: ' + str(sum(len(i) for i in database))); quit()
+    print('database size: ' + str(len(database)))
+    print('processes spawned: ' + str(multiprocessing.cpu_count()))
 
-	for cpu in range(multiprocessing.cpu_count()):
-		multiprocessing.Process(target = main, args = (database, )).start()
-
+    for cpu in range(multiprocessing.cpu_count()):
+        multiprocessing.Process(target = main, args = (database, args)).start()
