@@ -124,7 +124,7 @@ if __name__ == '__main__':
                     print('invalid input. verbose must be 0(false) or 1(true)')
                     sys.exit(-1)
             case 'substring':
-                substring = arg.split['='][1]
+                substring = int(arg.split('=')[1])
                 if substring > 0 and substring < 27:
                     args['substring'] = substring
                 else:
