@@ -1,6 +1,6 @@
 # Database FAQ
 
-This database is collection of text files containing all funded Bitcoin addresses downloaded from http://addresses.loyce.club/
+This database is a collection of text files containing all funded Bitcoin addresses downloaded from http://addresses.loyce.club/
 
 The name of the text file is the date when the database was last updated in month_day_year format. The file will be updated every 3-6 months.
 
