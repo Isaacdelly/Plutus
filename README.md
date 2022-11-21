@@ -64,7 +64,7 @@ This program has optional parameters to customize how it runs:
 __help__: `python3 plutus.py help` <br />
 Prints a short explanation of the parameters and how they work
 
-__time__: `python3 plutus.pt time` <br />
+__time__: `python3 plutus.py time` <br />
 Brute forces a single address and takes a timestamp of how long it took - used for speed testing purposes
 
 __verbose__: 0 or 1 <br />
