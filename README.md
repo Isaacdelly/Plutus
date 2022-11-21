@@ -20,15 +20,15 @@ sudo apt-get install libgmp3-dev
 # Installation
 
 ```
-$ git clone https://github.com/Isaacdelly/Plutus.git plutus
+git clone https://github.com/Isaacdelly/Plutus.git plutus
 
-$ cd plutus && pip3 install -r requirements.txt
+cd plutus && pip3 install -r requirements.txt
 ```
 
 # Quick Start
 
 ```
-$ python3 plutus.py
+python3 plutus.py
 ```
 
 # Proof Of Concept
@@ -39,9 +39,9 @@ This program is essentially a brute forcing algorithm. It continuously generates
 
 # How It Works
 
-32 byte hexidecimal strings are generated randomly using the `os.urandom()` function and are used as our private keys.
+32 byte hexidecimal strings are generated randomly using `os.urandom()` and are used as our private keys.
 
-The private keys are converted into their respective public keys using the `fastecdsa` python library. This is the fastest library to perform secp256k1 signing. If you run this on Windows then `fastecdsa` is not supported, so instead we use `starkbank-ecdsa` library to generate public keys. The public keys are converted into their Bitcoin wallet addresses using the `binascii` and `hashlib` standard libraries.
+The private keys are converted into their respective public keys using the `fastecdsa` python library. This is the fastest library to perform secp256k1 signing. If you run this on Windows then `fastecdsa` is not supported, so instead we use `starkbank-ecdsa` to generate public keys. The public keys are converted into their Bitcoin wallet addresses using the `binascii` and `hashlib` standard libraries.
 
 A pre-calculated database of every funded P2PKH Bitcoin address is included in this project. The generated address is searched within the database, and if it is found that the address has a balance, then the private key, public key and wallet address are saved to the text file `plutus.txt` on the user's hard drive.
 
