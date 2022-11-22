@@ -22,8 +22,8 @@ def private_key_to_public_key(private_key, fastecdsa):
         key = keys.get_public_key(int('0x' + private_key, 0), curve.secp256k1)
         return '04' + (hex(key.x)[2:] + hex(key.y)[2:]).zfill(128)
     else:
-        pk = PrivateKey().fromString(bytes.fromhex(private_key))
-        return '04' + pk.publicKey().toString().hex().upper()
+        pk = PrivateKey().fromString(private_key)
+        return '04' + pk.publicKey().toString().upper()
 
 def public_key_to_address(public_key):
     output = []
@@ -145,6 +145,6 @@ if __name__ == '__main__':
 
     print('database size: ' + str(len(database)))
     print('processes spawned: ' + str(multiprocessing.cpu_count()))
-
+    
     for cpu in range(multiprocessing.cpu_count()):
         multiprocessing.Process(target = main, args = (database, args)).start()
