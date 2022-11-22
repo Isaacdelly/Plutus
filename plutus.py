@@ -67,11 +67,11 @@ def main(database, args):
 
         if args['verbose']:
             print(address)
-
+        
         if address[-args['substring']:] in database:
             for filename in os.listdir(DATABASE):
                 with open(DATABASE + filename) as file:
-                    if address in file:
+                    if address in file.read():
                         with open('plutus.txt', 'a') as file:
                             file.write('hex private key: ' + str(private_key) + '\n' +
                                        'WIF private key: ' + str(private_key_to_wif(private_key)) + '\n'
