@@ -72,11 +72,11 @@ def main(database, args):
             for filename in os.listdir(DATABASE):
                 with open(DATABASE + filename) as file:
                     if address in file.read():
-                        with open('plutus.txt', 'a') as file:
-                            file.write('hex private key: ' + str(private_key) + '\n' +
-                                       'WIF private key: ' + str(private_key_to_wif(private_key)) + '\n'
-                                       'public key: ' + str(public_key) + '\n' +
-                                       'uncompressed address: ' + str(address) + '\n\n')
+                        with open('plutus.txt', 'a') as plutus:
+                            plutus.write('hex private key: ' + str(private_key) + '\n' +
+                                         'WIF private key: ' + str(private_key_to_wif(private_key)) + '\n'
+                                         'public key: ' + str(public_key) + '\n' +
+                                         'uncompressed address: ' + str(address) + '\n\n')
                         break
 
 def print_help():
