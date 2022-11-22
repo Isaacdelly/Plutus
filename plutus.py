@@ -111,28 +111,28 @@ if __name__ == '__main__':
         args['fastecdsa'] = True
     
     for arg in sys.argv[1:]:
-        match arg.split('=')[0]:
-            case 'help':
-                print_help()
-            case 'time':
-                timer(args)
-            case 'verbose':
-                verbose = arg.split('=')[1]
-                if verbose in ['0', '1']:
-                    args['verbose'] = verbose
-                else:
-                    print('invalid input. verbose must be 0(false) or 1(true)')
-                    sys.exit(-1)
-            case 'substring':
-                substring = int(arg.split('=')[1])
-                if substring > 0 and substring < 27:
-                    args['substring'] = substring
-                else:
-                    print('invalid input. substring must be greater than 0 and less than 27')
-                    sys.exit(-1)
-            case other:
-                print('invalid input: ' + arg.split('=')[0] + '\nrun `python3 plutus.py help` for help')
+        command = arg.split('=')[0]
+        if command == 'help':
+            print_help()
+        elif command == 'time':
+            timer(args)
+        elif command == 'verbose':
+            verbose = arg.split('=')[1]
+            if verbose in ['0', '1']:
+                args['verbose'] = verbose
+            else:
+                print('invalid input. verbose must be 0(false) or 1(true)')
                 sys.exit(-1)
+        elif command == 'substring':
+            substring = int(arg.split('=')[1])
+            if substring > 0 and substring < 27:
+                args['substring'] = substring
+            else:
+                print('invalid input. substring must be greater than 0 and less than 27')
+                sys.exit(-1)
+        else:
+            print('invalid input: ' + arg.split('=')[0] + '\nrun `python3 plutus.py help` for help')
+            sys.exit(-1)
     
     print('reading database files...')
     database = set()
