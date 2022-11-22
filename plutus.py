@@ -131,7 +131,7 @@ if __name__ == '__main__':
                 print('invalid input. substring must be greater than 0 and less than 27')
                 sys.exit(-1)
         else:
-            print('invalid input: ' + arg.split('=')[0] + '\nrun `python3 plutus.py help` for help')
+            print('invalid input: ' + command  + '\nrun `python3 plutus.py help` for help')
             sys.exit(-1)
     
     print('reading database files...')
