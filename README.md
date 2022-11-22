@@ -8,7 +8,7 @@ A Bitcoin wallet collider that brute forces random wallet addresses
 
 # Dependencies
 
-<a href="https://www.python.org/downloads/">Python 3.11</a> or higher
+<a href="https://www.python.org/downloads/">Python 3.9</a> or higher
 
 Python modules listed in the <a href="/requirements.txt">requirements.txt<a/>
 
