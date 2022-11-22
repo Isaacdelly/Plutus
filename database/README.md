@@ -6,7 +6,7 @@ The name of the text file is the date when the database was last updated in mont
 
 ### How Many Addresses Does The Database Have?
 
-The database currently holds `43,212,885 Bitcoin addresses`. This is the total number of Bitcoin addresses with a balance that exist in the blockchain at the time of uploading.
+The database currently holds `43,212,954 Bitcoin addresses`. This is the total number of Bitcoin addresses with a balance that exist in the blockchain at the time of uploading.
 
 ### Why Are There So Many Files?
 
