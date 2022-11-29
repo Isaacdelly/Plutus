@@ -2,7 +2,7 @@
 # Made by Isaac Delly
 # https://github.com/Isaacdelly/Plutus
 
-from fastecdsa import keys, curve #Comment this out on Windows
+#from fastecdsa import keys, curve
 from ellipticcurve.privateKey import PrivateKey
 import platform
 import multiprocessing
@@ -22,8 +22,8 @@ def private_key_to_public_key(private_key, fastecdsa):
         key = keys.get_public_key(int('0x' + private_key, 0), curve.secp256k1)
         return '04' + (hex(key.x)[2:] + hex(key.y)[2:]).zfill(128)
     else:
-        pk = PrivateKey().fromString(bytes.fromhex(private_key)) #Windows Fix
-        return '04' + pk.publicKey().toString().hex().upper() #Windows Fix
+        pk = PrivateKey().fromString(bytes.fromhex(private_key))
+        return '04' + pk.publicKey().toString().hex().upper()
 
 def public_key_to_address(public_key):
     output = []
@@ -109,15 +109,23 @@ if __name__ == '__main__':
     args = {
         'verbose': 0,
         'substring': 8,
-        'fastecdsa': False
+        'fastecdsa': False,
+        'cpu_count': multiprocessing.cpu_count(),
     }
     if platform.system() in ['Linux', 'Darwin']:
         args['fastecdsa'] = True
-    
     for arg in sys.argv[1:]:
         command = arg.split('=')[0]
         if command == 'help':
             print_help()
+        elif command == 'cpu_count':
+            cpu_count = int(arg.split('=')[1])
+            if cpu_count > 0 and cpu_count <= multiprocessing.cpu_count():
+                args['cpu_count'] = cpu_count
+            else:
+                args['cpu_count']=multiprocessing.cpu_count()
+                print('invalid input. cpu_count must be greater than 0 and less than your CPU count')
+                sys.exit(-1)
         elif command == 'time':
             timer(args)
         elif command == 'verbose':
@@ -148,7 +156,7 @@ if __name__ == '__main__':
     print('DONE')
 
     print('database size: ' + str(len(database)))
-    print('processes spawned: ' + str(multiprocessing.cpu_count()))
+    print('processes spawned: ' + str(args['cpu_count']))
     
-    for cpu in range(multiprocessing.cpu_count()):
+    for cpu in range(args['cpu_count']):
         multiprocessing.Process(target = main, args = (database, args)).start()
