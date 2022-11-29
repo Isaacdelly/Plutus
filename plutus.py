@@ -3,7 +3,7 @@
 # https://github.com/Isaacdelly/Plutus
 
 #from fastecdsa import keys, curve
-from ellipticcurve.privateKey import PrivateKey
+from fastecdsa import keys, curve #Comment this out on Windows
 import platform
 import multiprocessing
 import hashlib
