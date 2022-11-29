@@ -2,7 +2,7 @@
 # Made by Isaac Delly
 # https://github.com/Isaacdelly/Plutus
 
-from fastecdsa import keys, curve
+from fastecdsa import keys, curve #Comment this out on Windows
 from ellipticcurve.privateKey import PrivateKey
 import platform
 import multiprocessing
@@ -22,8 +22,8 @@ def private_key_to_public_key(private_key, fastecdsa):
         key = keys.get_public_key(int('0x' + private_key, 0), curve.secp256k1)
         return '04' + (hex(key.x)[2:] + hex(key.y)[2:]).zfill(128)
     else:
-        pk = PrivateKey().fromString(private_key)
-        return '04' + pk.publicKey().toString().upper()
+        pk = PrivateKey().fromString(bytes.fromhex(private_key)) #Windows Fix
+        return '04' + pk.publicKey().toString().hex().upper() #Windows Fix
 
 def public_key_to_address(public_key):
     output = []
