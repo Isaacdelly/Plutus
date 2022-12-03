@@ -76,6 +76,8 @@ __verbose__: 0 or 1 <br />
 __substring__: `python3 plutus.py substring=8`:
 To make the program memory efficient, the entire bitcoin address is not loaded from the database. Only the last <__substring__> characters are loaded. This significantly reduces the amount of RAM required to run the program. if you still get memory errors then try making this number smaller, by default it is set to 8. This opens us up to getting false positives (empty addresses mistaken as funded) with a probability of 1/(16^<__substring__>), however it does NOT leave us vulnerable to false negatives (funded addresses being mistaken as empty) so this is an acceptable compromise.
 
+__cpu_count__: `python3 plutus.py cpu_count=1`: number of cores to run concurrently. More cores = more resource usage but faster bruteforcing. Omit this parameter to run with the maximum number of cores
+
 By default the program runs using `python3 plutus.py verbose=0 substring=8` if nothing is passed.
   
 # Expected Output

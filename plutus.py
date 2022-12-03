@@ -3,6 +3,7 @@
 # https://github.com/Isaacdelly/Plutus
 
 from fastecdsa import keys, curve
+from ellipticcurve.privateKey import PrivateKey
 import platform
 import multiprocessing
 import hashlib
@@ -115,10 +116,13 @@ if __name__ == '__main__':
     }
     if platform.system() in ['Linux', 'Darwin']:
         args['fastecdsa'] = True
+    
     for arg in sys.argv[1:]:
         command = arg.split('=')[0]
         if command == 'help':
             print_help()
+        elif command == 'time':
+            timer(args)
         elif command == 'cpu_count':
             cpu_count = int(arg.split('=')[1])
             if cpu_count > 0 and cpu_count <= multiprocessing.cpu_count():
@@ -127,8 +131,6 @@ if __name__ == '__main__':
                 args['cpu_count'] = multiprocessing.cpu_count()
                 print('invalid input. cpu_count must be greater than 0 and less than or equal to ' + str(multiprocessing.cpu_count()))
                 sys.exit(-1)
-        elif command == 'time':
-            timer(args)
         elif command == 'verbose':
             verbose = arg.split('=')[1]
             if verbose in ['0', '1']:
