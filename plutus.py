@@ -111,11 +111,9 @@ if __name__ == '__main__':
     args = {
         'verbose': 0,
         'substring': 8,
-        'fastecdsa': False,
+        'fastecdsa': platform.system() in ['Linux', 'Darwin'],
         'cpu_count': multiprocessing.cpu_count(),
     }
-    if platform.system() in ['Linux', 'Darwin']:
-        args['fastecdsa'] = True
     
     for arg in sys.argv[1:]:
         command = arg.split('=')[0]
