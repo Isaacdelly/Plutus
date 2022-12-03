@@ -125,7 +125,7 @@ if __name__ == '__main__':
                 args['cpu_count'] = cpu_count
             else:
                 args['cpu_count'] = multiprocessing.cpu_count()
-                print('invalid input. cpu_count must be greater than 0 and less than ' + str(multiprocessing.cpu_count()))
+                print('invalid input. cpu_count must be greater than 0 and less than or equal to ' + str(multiprocessing.cpu_count()))
                 sys.exit(-1)
         elif command == 'time':
             timer(args)
