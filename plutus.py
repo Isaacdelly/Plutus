@@ -126,6 +126,7 @@ if __name__ == '__main__':
             if cpu_count > 0 and cpu_count <= multiprocessing.cpu_count():
                 args['cpu_count'] = cpu_count
             else:
+                args['cpu_count'] = multiprocessing.cpu_count()
                 print('invalid input. cpu_count must be greater than 0 and less than or equal to ' + str(multiprocessing.cpu_count()))
                 sys.exit(-1)
         elif command == 'verbose':
@@ -152,7 +153,8 @@ if __name__ == '__main__':
         with open(DATABASE + filename) as file:
             for address in file:
                 address = address.strip()
-                database.add(address[-args['substring']:])
+                if address.startswith('1'):
+                    database.add(address[-args['substring']:])
     print('DONE')
 
     print('database size: ' + str(len(database)))
