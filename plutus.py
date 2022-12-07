@@ -88,6 +88,8 @@ Speed test:
 execute 'python3 plutus.py time', the output will be the time it takes to bruteforce a single address in seconds
 
 
+Quick start: run command 'python3 plutus.py'
+
 By default this program runs with parameters:
 python3 plutus.py verbose=0 substring=8
 
