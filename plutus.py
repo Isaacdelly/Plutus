@@ -131,8 +131,8 @@ if __name__ == '__main__':
                 print('invalid input. cpu_count must be greater than 0 and less than or equal to ' + str(multiprocessing.cpu_count()))
                 sys.exit(-1)
         elif command == 'verbose':
-            verbose = arg.split('=')[1]
-            if verbose in ['0', '1']:
+            verbose = int(arg.split('=')[1])
+            if verbose in [0, 1]:
                 args['verbose'] = verbose
             else:
                 print('invalid input. verbose must be 0(false) or 1(true)')
