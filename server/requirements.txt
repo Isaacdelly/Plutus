@@ -45,7 +45,6 @@
 # - Flask: Framework web utilizado para criar o servidor.
 # - requests: Biblioteca para realizar requisições HTTP.
 # - fastecdsa: Biblioteca para operações com curvas elípticas.
-# - py-ellipticcurve: Biblioteca alternativa para operações com curvas elípticas (útil no Windows).
 # - gunicorn: Servidor WSGI para rodar aplicações Flask em produção (ou online).
 #
 # Instruções para instalação:
@@ -67,7 +66,6 @@
 # - Flask: Web framework used to create the server.
 # - requests: Library for making HTTP requests.
 # - fastecdsa: Library for elliptic curve operations.
-# - py-ellipticcurve: Alternative library for elliptic curve operations (useful on Windows).
 # - gunicorn: WSGI server to run Flask applications in production (or online).
 #
 # Installation Instructions:
@@ -85,3 +83,4 @@ psycopg2-binary==2.9.6
 requests==2.32.3
 fastecdsa==3.0.1
 gunicorn==20.1.0
+psycopg2-binary==2.9.6

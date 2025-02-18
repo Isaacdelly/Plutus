@@ -1,5 +1,6 @@
 import os
 import datetime
+import threading
 from flask import Flask, request, jsonify
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
@@ -7,13 +8,17 @@ from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 
-# Obtém a URL do banco a partir da variável de ambiente (definida pelo Heroku)
+# Obtém a DATABASE_URL do ambiente e ajusta se necessário
 DATABASE_URL = os.environ.get("DATABASE_URL")
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# Cria a conexão com o banco de dados
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 Base = declarative_base()
 
-# MODELOS
+# Modelos do banco de dados
 class Task(Base):
     __tablename__ = "tasks"
     id = Column(Integer, primary_key=True, index=True)
@@ -41,119 +46,76 @@ class FoundWallet(Base):
     substring = Column(String)
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
 
-# Cria as tabelas, se não existirem
+# Cria as tabelas no banco de dados, se ainda não existirem
 Base.metadata.create_all(bind=engine)
 
-# Funções auxiliares para conversão
-def hex_to_int(hex_str):
-    return int(hex_str, 16)
+# Configurações para distribuição de tarefas
+TASK_SIZE = 1000000  # 1 milhão de candidatos por tarefa
+ASSIGNED_TASKS_FILE = "last_assigned_task.txt"
+task_lock = threading.Lock()
+current_range_start = 0
 
-def int_to_hex(value):
-    return hex(value)[2:].upper().zfill(64)
+def load_last_assigned():
+    global current_range_start
+    if os.path.exists(ASSIGNED_TASKS_FILE):
+        with open(ASSIGNED_TASKS_FILE, "r") as f:
+            line = f.read().strip()
+            if line:
+                try:
+                    current_range_start = int(line)
+                except Exception as e:
+                    print("Erro ao ler last_assigned_task.txt:", e)
+                    current_range_start = 0
+    else:
+        current_range_start = 0
 
-# Recupera o último valor atribuído (se não existir, inicializa com 64 zeros)
-def get_last_assigned(db):
-    meta = db.query(Metadata).filter(Metadata.key == "last_assigned").first()
-    if meta is None:
-        meta = Metadata(key="last_assigned", value="0" * 64)
-        db.add(meta)
-        db.commit()
-        db.refresh(meta)
-    return meta.value
+def save_last_assigned(value):
+    with open(ASSIGNED_TASKS_FILE, "w") as f:
+        f.write(str(value))
 
-def update_last_assigned(db, new_value):
-    meta = db.query(Metadata).filter(Metadata.key == "last_assigned").first()
-    if meta:
-        meta.value = new_value
-        db.commit()
+# Carrega o último valor atribuído
+load_last_assigned()
 
-# Constantes
-TASK_SIZE = 100         # Para testes; ajuste conforme necessário.
-TIMEOUT_SECONDS = 60    # Tempo limite para reatribuição de tarefas.
-MAX_VALUE = 2 ** 256
-
-def get_next_task():
-    db = SessionLocal()
-    now = datetime.datetime.utcnow()
-    # Procura tarefas em "processing" que excederam o timeout
-    task = (
-        db.query(Task)
-        .filter(Task.status == "processing", Task.assigned_at <= (now - datetime.timedelta(seconds=TIMEOUT_SECONDS)))
-        .first()
-    )
-    if task:
-        task.assigned_at = now
-        db.commit()
-        task_data = {"id": task.id, "start": task.range_start, "end": task.range_end}
-        db.close()
-        return task_data
-
-    # Caso não haja tarefa pendente para reatribuição, cria uma nova tarefa
-    last_assigned = get_last_assigned(db)
-    last_int = hex_to_int(last_assigned)
-    new_end_int = last_int + TASK_SIZE
-    if new_end_int > MAX_VALUE:
-        db.close()
-        return None
-    range_start = int_to_hex(last_int)
-    range_end = int_to_hex(new_end_int)
-    new_task = Task(range_start=range_start, range_end=range_end, assigned_at=now, status="processing")
-    db.add(new_task)
-    db.commit()
-    task_id = new_task.id
-    update_last_assigned(db, range_end)
-    db.close()
-    return {"id": task_id, "start": range_start, "end": range_end}
-
-# Endpoints
 @app.route('/')
 def index():
-    return "Servidor do Projeto Jupiter com Heroku Postgres"
+    return "Projeto Jupiter - Servidor online. Use /get_task para obter uma tarefa."
 
-@app.route('/get_task', methods=["GET"])
+@app.route('/get_task', methods=['GET'])
 def get_task():
-    task = get_next_task()
-    if task is None:
-        return jsonify({"message": "No more tasks available"}), 404
-    return jsonify({"task_id": task["id"], "start": task["start"], "end": task["end"]})
+    """
+    Distribui um intervalo (range) de tarefas para um worker.
+    """
+    global current_range_start
+    with task_lock:
+        # Limite total (5 bytes): 2**40
+        if current_range_start >= 2**40:
+            return jsonify({"message": "No more tasks available"}), 404
+        start = current_range_start
+        end = start + TASK_SIZE
+        current_range_start = end
+        save_last_assigned(current_range_start)
+    print(f"Assigned task range: {start} to {end}")
+    # Usa o valor de start como task_id (para simplicidade)
+    return jsonify({"task_id": start, "start": str(start), "end": str(end)})
 
-@app.route('/task_complete', methods=["POST"])
+@app.route('/task_complete', methods=['POST'])
 def task_complete():
-    data = request.get_json()
-    task_id = data.get("task_id")
-    if not task_id:
-        return jsonify({"error": "task_id is required"}), 400
-    db = SessionLocal()
-    task = db.query(Task).filter(Task.id == task_id).first()
-    if task:
-        task.status = "completed"
-        task.completed_at = datetime.datetime.utcnow()
-        db.commit()
-    db.close()
-    return jsonify({"message": "Task marked as completed", "task_id": task_id})
+    """
+    Recebe e registra a conclusão de uma tarefa pelos workers.
+    """
+    data = request.json
+    # Aqui, você pode atualizar o status da tarefa no banco de dados, se necessário.
+    print("Completed task:", data)
+    return jsonify({"message": "Task completion recorded"})
 
-@app.route('/tasks_status', methods=["GET"])
-def tasks_status():
-    db = SessionLocal()
-    tasks = db.query(Task).order_by(Task.id).all()
-    tasks_list = []
-    for t in tasks:
-        tasks_list.append({
-            "id": t.id,
-            "range_start": t.range_start,
-            "range_end": t.range_end,
-            "status": t.status,
-            "assigned_at": t.assigned_at.isoformat() if t.assigned_at else None,
-            "completed_at": t.completed_at.isoformat() if t.completed_at else None
-        })
-    db.close()
-    return jsonify(tasks_list)
-
-@app.route('/found', methods=["POST"])
+@app.route('/found', methods=['POST'])
 def found():
-    data = request.get_json()
-    db = SessionLocal()
-    new_found = FoundWallet(
+    """
+    Recebe os dados de uma carteira encontrada (ou quase encontrada) e os registra na tabela FoundWallet.
+    """
+    data = request.json
+    session = SessionLocal()
+    wallet = FoundWallet(
         hex_private_key=data.get("hex private key"),
         wif_private_key=data.get("WIF private key"),
         public_key=data.get("public key"),
@@ -164,9 +126,12 @@ def found():
         substring=data.get("substring"),
         timestamp=datetime.datetime.utcnow()
     )
-    db.add(new_found)
-    db.commit()
-    db.close()
+    session.add(wallet)
+    session.commit()
+    session.close()
+    print("Wallet found reported:")
+    print("Generated address:".ljust(22), data.get("uncompressed address"))
+    print("Database address: ".ljust(22), data.get("full_db_address"))
     return jsonify({"message": "Wallet result recorded"})
 
 if __name__ == '__main__':
