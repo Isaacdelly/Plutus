@@ -11,6 +11,7 @@ import os
 import sys
 import time
 import argparse
+import numpy as np
 
 DATABASE = r'database/12_26_2025/'
 ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
@@ -71,21 +72,30 @@ def public_key_to_address(public_key_bytes):
     return ''.join(output[::-1])
 
 def private_key_to_wif(private_key):
-    digest = hashlib.sha256(binascii.unhexlify('80' + private_key)).hexdigest()
-    var = hashlib.sha256(binascii.unhexlify(digest)).hexdigest()
-    var = binascii.unhexlify('80' + private_key + var[0:8])
-    alphabet = chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-    value = pad = 0
+    var_bytes = binascii.unhexlify('80' + private_key)
+    digest1 = hashlib.sha256(var_bytes).digest()
+    checksum = hashlib.sha256(digest1).digest()[:4]
+    full_bytes = np.frombuffer(var_bytes + checksum, dtype=np.uint8)
+    
+    value = 0
     result = ''
-    for i, c in enumerate(var[::-1]): value += 256**i * c
-    while value >= len(alphabet):
-        div, mod = divmod(value, len(alphabet))
-        result, value = chars[mod] + result, div
-    result = chars[value] + result
-    for c in var:
-        if c == 0: pad += 1
-        else: break
-    return chars[0] * pad + result
+    for i in range(len(full_bytes)-1, -1, -1):
+        value = value * 256 + full_bytes[i]
+    
+    while value >= 58:
+        div, mod = divmod(value, 58)
+        result = ALPHABET[mod] + result
+        value = div
+    
+    result = ALPHABET[value] + result
+    
+    pad = 0
+    for b in var_bytes:
+        if b == 0:
+            pad += 1
+        else:
+            break
+    return ALPHABET[0] * pad + result
 
 def main(database, args, counter):
     local_counter = 0
